@@ -11,6 +11,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     List<Article> Articles;
 
+    /**
+     * Inits.
+     */
     @PostConstruct
     public synchronized void init() {
 
