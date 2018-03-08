@@ -1,0 +1,22 @@
+<pre>
+
+get all articles: 
+curl -v -X GET http://localhost:8080/articles
+
+get article with id 1: 
+curl -v -X GET http://localhost:8080/articles/1
+
+get article with id 40 (doesnt exist): 
+curl -v -X GET http://localhost:8080/articles/40
+
+delete article with id 1:
+curl -v -X DELETE http://localhost:8080/articles/1
+
+delete article with id 1 again (doesnt exist): 
+curl -v -X DELETE http://localhost:8080/articles/1
+
+post new article: 
+curl -v -H "Content-type: application/json" -X POST -d "{\"headline\": \"test\", \"content\": \"test content\", \"publisher\": \"me\"}" http://localhost:8080/articles
+
+</pre>
+
