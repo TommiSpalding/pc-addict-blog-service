@@ -1,10 +1,10 @@
 package com.example.test.demo;
 
-public class CannotFindArticleException extends IllegalArgumentException {
+public class CannotFindBlogpostException extends IllegalArgumentException {
 
     private long id;
 
-    public CannotFindArticleException(long id) {
+    public CannotFindBlogpostException(long id) {
         this.id = id;
     }
 

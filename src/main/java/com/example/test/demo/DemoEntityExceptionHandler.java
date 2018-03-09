@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class DemoEntityExceptionHandler {
 
-    @ExceptionHandler(CannotFindArticleException.class)
-    public ResponseEntity<ErrorInfo> handleConflict(CannotFindArticleException ex) {
+    @ExceptionHandler(CannotFindBlogpostException.class)
+    public ResponseEntity<ErrorInfo> handleConflict(CannotFindBlogpostException ex) {
 
-        ErrorInfo e = new ErrorInfo("Cannot find article with id: " + ex.getId());
+        ErrorInfo e = new ErrorInfo("Cannot find blog post with id: " + ex.getId());
 
         return new ResponseEntity<ErrorInfo>(e, HttpStatus.NOT_FOUND);
     }

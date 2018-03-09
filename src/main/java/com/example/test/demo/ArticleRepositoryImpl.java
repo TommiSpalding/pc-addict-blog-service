@@ -40,7 +40,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         Article a = findOne(aLong);
 
         if(a == null || !Articles.contains(a))
-            throw new CannotFindArticleException(aLong);
+            throw new CannotFindBlogpostException(aLong);
 
         Articles.remove(a);
     }
@@ -54,7 +54,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         Article article = this.Articles.stream().filter(a -> (a.getId() == aLong)).findFirst().orElse(null);
 
         if(article == null)
-            throw new CannotFindArticleException(aLong);
+            throw new CannotFindBlogpostException(aLong);
 
         return article;
     }
