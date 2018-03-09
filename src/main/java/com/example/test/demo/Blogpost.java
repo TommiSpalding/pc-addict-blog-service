@@ -1,28 +1,39 @@
 package com.example.test.demo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Blogpost {
-    @Id @GeneratedValue
+
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="blogpost_id")
     private long blogId;
+
     private String title;
+
     private String textbody;
+
     @Column(name="author_name")
     private String authorName;
+
     @Column(name="time_posted")
     private long timePosted;
+
+    @ElementCollection
+    @OneToMany(cascade=CascadeType.ALL)
+    @Column(name="comments_id")
+    private List<Comment> comments = new ArrayList<>();
 
     public Blogpost() {
         setTimePosted(Instant.now().getEpochSecond());
     }
 
     public Blogpost(String title, String textbody, String authorName) {
+
         setTitle(title);
         setTextbody(textbody);
         setAuthorName(authorName);
@@ -67,5 +78,37 @@ public class Blogpost {
 
     public void setTimePosted(long timePosted) {
         this.timePosted = timePosted;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment c) {
+
+        comments.add(c);
+    }
+
+    public void removeComment(Comment c) {
+
+        comments.remove(c);
+    }
+
+    public Optional<Comment> getComment(int id) {
+
+        Optional<Comment> opt = Optional.empty();
+
+        try {
+            opt = Optional.of(comments.get(id));
+        } catch (IndexOutOfBoundsException ex) {
+
+            //it will send the error message in the calling method
+        }
+
+        return opt;
     }
 }

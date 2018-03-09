@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -48,14 +51,19 @@ public class RestController {
     public ResponseEntity<Blogpost> getBlogpost(@PathVariable long id) throws CannotFindBlogpostException {
 
         Optional<Blogpost> opt = repo.findById(id);
+
         if (!opt.isPresent()) throw new CannotFindBlogpostException(id);
+
         Blogpost blogpost = opt.get();
+
         return new ResponseEntity<>(blogpost, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/blogposts/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteBlogpost(@PathVariable long id) throws CannotFindBlogpostException {
+
         if (!repo.findById(id).isPresent()) throw new CannotFindBlogpostException(id);
+
         repo.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -63,15 +71,24 @@ public class RestController {
 
     //#############################################Comments###################################################
 
+
+    //is this needed?????????????
     @Autowired
-    CommentRepository cRepo;
+    private CommentRepository cRepo;
 
-    @RequestMapping(value = "/comments", method = RequestMethod.POST)
-    public ResponseEntity<Void> postComment(@RequestBody Comment a, UriComponentsBuilder b) {
+    @RequestMapping(value = "blogposts/{blogpostsId}/comments", method = RequestMethod.POST)
+    public ResponseEntity<Void> postComment(@PathVariable long blogpostsId, @RequestBody Comment a, UriComponentsBuilder b) throws CannotFindBlogpostException {
 
-        cRepo.save(a);
+        Optional<Blogpost> opt = repo.findById(blogpostsId);
 
-        UriComponents uriComponents = b.path("/comments/{id}").buildAndExpand(a.getId());
+        if (!opt.isPresent()) throw new CannotFindBlogpostException(blogpostsId);
+
+        Blogpost blogpost = opt.get();
+
+        blogpost.addComment(a);
+        repo.save(blogpost);
+
+        UriComponents uriComponents = b.path("/{blogpostsId}/comments/{id}").buildAndExpand(blogpostsId, a.getId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uriComponents.toUri());
@@ -79,34 +96,63 @@ public class RestController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/comments", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Comment>> getComment() {
+    @RequestMapping(value = "blogposts/{blogpostsId}/comments", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Comment>> getComment(@PathVariable long blogpostsId) throws CannotFindBlogpostException {
 
-        Iterable<Comment> blogposts = cRepo.findAll();
+        Optional<Blogpost> opt = repo.findById(blogpostsId);
+
+        if (!opt.isPresent()) throw new CannotFindBlogpostException(blogpostsId);
+
+        Blogpost blogpost = opt.get();
+
+        Iterable<Comment> comments = blogpost.getComments();
         HttpStatus status = HttpStatus.OK;
 
         int size = 0;
-        for(Comment value : blogposts) { size++; }
+        for(Comment value : comments) { size++; }
 
         if(size == 0)
             status = HttpStatus.NOT_FOUND;
 
-        return new ResponseEntity<>(blogposts, status);
+        return new ResponseEntity<>(comments, status);
     }
 
-    @RequestMapping(value = "/comments/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Comment> getComments(@PathVariable long id) throws CannotFindCommentException {
+    @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Comment> getComments(@PathVariable long blogpostsId, @PathVariable int id) throws CannotFindBlogpostException, CannotFindCommentException {
 
-        Optional<Comment> opt = cRepo.findById(id);
-        if (!opt.isPresent()) throw new CannotFindCommentException(id);
-        Comment comment = opt.get();
+        Optional<Blogpost> opt = repo.findById(blogpostsId);
+
+        if (!opt.isPresent()) throw new CannotFindBlogpostException(blogpostsId);
+
+        Blogpost blogpost = opt.get();
+
+        Optional<Comment> c = blogpost.getComment(id);
+
+        if (!c.isPresent()) throw new CannotFindCommentException(id);
+
+        Comment comment = c.get();
+
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteComment(@PathVariable long id) throws CannotFindCommentException {
-        if (!cRepo.findById(id).isPresent()) throw new CannotFindCommentException(id);
-        cRepo.deleteById(id);
+    @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteComment(@PathVariable long blogpostsId, @PathVariable int id) throws CannotFindBlogpostException, CannotFindCommentException {
+
+        Optional<Blogpost> opt = repo.findById(blogpostsId);
+
+        if (!opt.isPresent()) throw new CannotFindBlogpostException(blogpostsId);
+
+        Blogpost blogpost = opt.get();
+
+        Optional<Comment> c = blogpost.getComment(id);
+
+        if (!c.isPresent()) throw new CannotFindCommentException(id);
+
+        Comment comment = c.get();
+
+        blogpost.removeComment(comment);
+
+        repo.save(blogpost);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

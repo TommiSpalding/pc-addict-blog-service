@@ -5,27 +5,41 @@ import java.time.Instant;
 
 @Entity
 public class Comment {
-    @Id @GeneratedValue
+
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="comment_id")
     private long id;
+
     private String author;
+
     private String textbody;
+
     @Column(name="time_posted")
     private long timePosted;
-    @ManyToOne
-    @JoinColumn(name="blogpost_id")
-    private Blogpost blogpost;
+
+    //@ManyToOne
+    //@JoinColumn(name="blogpost_id")
+    //private Blogpost blogpost;
 
     public Comment() {
         setTimePosted(Instant.now().getEpochSecond());
     }
 
+    public Comment(String textbody, String author) {
+
+        setTextbody(textbody);
+        setAuthor(author);
+        setTimePosted(Instant.now().getEpochSecond());
+    }
+
+    /*
     public Comment(Blogpost blogpost,String textbody, String author) {
+
         setTextbody(textbody);
         setAuthor(author);
         setBlogpost(blogpost);
         setTimePosted(Instant.now().getEpochSecond());
-    }
+    }*/
 
     public long getId() {
         return id;
@@ -59,11 +73,11 @@ public class Comment {
         this.timePosted = timePosted;
     }
 
-    public Blogpost getBlogpost() {
-        return blogpost;
-    }
+    //public Blogpost getBlogpost() {
+    //    return blogpost;
+    //}
 
-    public void setBlogpost(Blogpost blogpost) {
-        this.blogpost = blogpost;
-    }
+    //public void setBlogpost(Blogpost blogpost) {
+    //    this.blogpost = blogpost;
+    //}
 }

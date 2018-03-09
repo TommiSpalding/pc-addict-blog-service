@@ -20,15 +20,16 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		blogpostRepository.save(new Blogpost("Jepen niksit", "asdkjfsglkasgkjölgkasgasfkljglöafjgöajaögjöalj", "jepe"));
-		blogpostRepository.save(new Blogpost("Jepen niksit 2", "ölölölölölölölölölölölööllölölölölölöö", "jepe"));
-		blogpostRepository.save(new Blogpost("Jepen niksit 3", "easdasfasrhfghasga", "jepe"));
-		blogpostRepository.save(new Blogpost("Jepen niksit 4", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "jepe"));
-		Blogpost post = new Blogpost("Jepen niksit 5", "heh", "jepe");
-		blogpostRepository.save(post);
 
-		commentRepository.save(new Comment(post, "Sä oot siis ihan vitun pelle", "joonas"));
-		commentRepository.save(new Comment(post, "You disgrace our family son.", "dada"));
-		commentRepository.save(new Comment(post, "lol ;)))", "pete"));
+		Blogpost post = new Blogpost("Jepen niksit redux", "oon homo", "jeppe");
+        post.addComment(new Comment("vitun homo tapa ittes xd", "edgelord"));
+        post.addComment(new Comment("ihan jees", "make"));
+        post.addComment(new Comment("kiva juttu hei, mut kuis se ny nii", "???"));
+        blogpostRepository.save(post);
+
+        post = new Blogpost("Jarmo-Jorman paskat vitsit 1", "minä ainakin voitan leipää", "JJ");
+        post.addComment(new Comment("mee kotiis", "ei näin"));
+        post.addComment(new Comment("ei vittu mitä paskaa :DD", "make"));
+        blogpostRepository.save(post);
 	}
 }
