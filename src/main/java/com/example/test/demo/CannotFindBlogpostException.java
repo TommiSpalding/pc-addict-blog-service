@@ -1,14 +1,9 @@
 package com.example.test.demo;
 
-public class CannotFindBlogpostException extends IllegalArgumentException {
-
-    private long id;
+public class CannotFindBlogpostException extends CannotFindEntityException {
 
     public CannotFindBlogpostException(long id) {
-        this.id = id;
+        super(id);
     }
 
-    public long getId() {
-        return id;
-    }
 }

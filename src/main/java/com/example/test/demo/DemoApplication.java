@@ -11,6 +11,9 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	BlogpostRepository blogpostRepository;
 
+	@Autowired
+	CommentRepository commentRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -21,6 +24,11 @@ public class DemoApplication implements CommandLineRunner {
 		blogpostRepository.save(new Blogpost("Jepen niksit 2", "ölölölölölölölölölölölööllölölölölölöö", "jepe"));
 		blogpostRepository.save(new Blogpost("Jepen niksit 3", "easdasfasrhfghasga", "jepe"));
 		blogpostRepository.save(new Blogpost("Jepen niksit 4", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "jepe"));
-		blogpostRepository.save(new Blogpost("Jepen niksit 5", "heh", "jepe"));
+		Blogpost post = new Blogpost("Jepen niksit 5", "heh", "jepe");
+		blogpostRepository.save(post);
+
+		commentRepository.save(new Comment(post, "Sä oot siis ihan vitun pelle", "joonas"));
+		commentRepository.save(new Comment(post, "You disgrace our family son.", "dada"));
+		commentRepository.save(new Comment(post, "lol ;)))", "pete"));
 	}
 }

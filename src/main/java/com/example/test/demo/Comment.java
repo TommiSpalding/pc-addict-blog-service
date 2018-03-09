@@ -1,30 +1,28 @@
 package com.example.test.demo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-public class Blogpost {
+public class Comment {
     @Id @GeneratedValue
     private long id;
-    private String title;
+    private String author;
     private String textbody;
-    @Column(name="author_name")
-    private String authorName;
     @Column(name="time_posted")
     private long timePosted;
+    @ManyToOne
+    @JoinColumn(name="blogpost_id")
+    private Blogpost blogpost;
 
-    public Blogpost() {
+    public Comment() {
         setTimePosted(Instant.now().getEpochSecond());
     }
 
-    public Blogpost(String title, String textbody, String authorName) {
-        setTitle(title);
+    public Comment(Blogpost blogpost,String textbody, String author) {
         setTextbody(textbody);
-        setAuthorName(authorName);
+        setAuthor(author);
+        setBlogpost(blogpost);
         setTimePosted(Instant.now().getEpochSecond());
     }
 
@@ -36,12 +34,12 @@ public class Blogpost {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getTextbody() {
@@ -52,19 +50,19 @@ public class Blogpost {
         this.textbody = textbody;
     }
 
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
     public long getTimePosted() {
         return timePosted;
     }
 
     public void setTimePosted(long timePosted) {
         this.timePosted = timePosted;
+    }
+
+    public Blogpost getBlogpost() {
+        return blogpost;
+    }
+
+    public void setBlogpost(Blogpost blogpost) {
+        this.blogpost = blogpost;
     }
 }

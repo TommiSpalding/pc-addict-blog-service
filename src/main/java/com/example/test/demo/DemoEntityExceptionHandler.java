@@ -15,4 +15,12 @@ public class DemoEntityExceptionHandler {
 
         return new ResponseEntity<ErrorInfo>(e, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CannotFindCommentException.class)
+    public ResponseEntity<ErrorInfo> commentNotFound(CannotFindCommentException ex) {
+
+        ErrorInfo e = new ErrorInfo("Cannot find comment with id: " + ex.getId());
+
+        return new ResponseEntity<ErrorInfo>(e, HttpStatus.NOT_FOUND);
+    }
 }
