@@ -9,7 +9,8 @@ import java.time.Instant;
 @Entity
 public class Blogpost {
     @Id @GeneratedValue
-    private long id;
+    @Column(name="blogpost_id")
+    private long blogId;
     private String title;
     private String textbody;
     @Column(name="author_name")
@@ -29,11 +30,11 @@ public class Blogpost {
     }
 
     public long getId() {
-        return id;
+        return blogId;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.blogId = id;
     }
 
     public String getTitle() {

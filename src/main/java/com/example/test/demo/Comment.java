@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 public class Comment {
     @Id @GeneratedValue
+    @Column(name="comment_id")
     private long id;
     private String author;
     private String textbody;

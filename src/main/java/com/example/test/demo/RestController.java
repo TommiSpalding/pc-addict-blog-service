@@ -95,17 +95,17 @@ public class RestController {
     }
 
     @RequestMapping(value = "/comments/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Comment> getComments(@PathVariable long id) throws CannotFindBlogpostException {
+    public ResponseEntity<Comment> getComments(@PathVariable long id) throws CannotFindCommentException {
 
         Optional<Comment> opt = cRepo.findById(id);
-        if (!opt.isPresent()) throw new CannotFindBlogpostException(id);
+        if (!opt.isPresent()) throw new CannotFindCommentException(id);
         Comment comment = opt.get();
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteComment(@PathVariable long id) throws CannotFindBlogpostException {
-        if (!cRepo.findById(id).isPresent()) throw new CannotFindBlogpostException(id);
+    public ResponseEntity<Void> deleteComment(@PathVariable long id) throws CannotFindCommentException {
+        if (!cRepo.findById(id).isPresent()) throw new CannotFindCommentException(id);
         cRepo.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
