@@ -1,4 +1,4 @@
-package com.example.test.demo;
+package com.example.test.demo.db;
 
 import javax.persistence.*;
 import java.time.Instant;

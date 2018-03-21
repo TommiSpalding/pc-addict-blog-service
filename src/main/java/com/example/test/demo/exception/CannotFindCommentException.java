@@ -1,4 +1,4 @@
-package com.example.test.demo;
+package com.example.test.demo.exception;
 
 public class CannotFindCommentException extends CannotFindEntityException {
 

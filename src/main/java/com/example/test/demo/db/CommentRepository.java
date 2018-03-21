@@ -1,4 +1,4 @@
-package com.example.test.demo;
+package com.example.test.demo.db;
 
 import org.springframework.data.repository.CrudRepository;
 

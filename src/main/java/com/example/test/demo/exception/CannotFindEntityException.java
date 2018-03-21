@@ -1,4 +1,4 @@
-package com.example.test.demo;
+package com.example.test.demo.exception;
 
 public class CannotFindEntityException extends IllegalArgumentException {
 

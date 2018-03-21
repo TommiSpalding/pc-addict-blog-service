@@ -1,5 +1,9 @@
 package com.example.test.demo;
 
+import com.example.test.demo.db.Blogpost;
+import com.example.test.demo.db.BlogpostRepository;
+import com.example.test.demo.db.Comment;
+import com.example.test.demo.db.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +13,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
-	BlogpostRepository blogpostRepository;
+    BlogpostRepository blogpostRepository;
 
 	@Autowired
-	CommentRepository commentRepository;
+    CommentRepository commentRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);

@@ -1,5 +1,11 @@
-package com.example.test.demo;
+package com.example.test.demo.controller;
 
+import com.example.test.demo.db.Blogpost;
+import com.example.test.demo.db.BlogpostRepository;
+import com.example.test.demo.db.Comment;
+import com.example.test.demo.db.CommentRepository;
+import com.example.test.demo.exception.CannotFindBlogpostException;
+import com.example.test.demo.exception.CannotFindCommentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
