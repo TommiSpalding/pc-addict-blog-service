@@ -28,7 +28,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/admin.html").authenticated()
             //.antMatchers(HttpMethod.POST, "/**").authenticated()
-            .antMatchers(HttpMethod.DELETE, "/**").authenticated()
+            //.antMatchers(HttpMethod.DELETE, "/**").authenticated()
             .antMatchers(HttpMethod.GET, "/**").permitAll()
             .and()
             .formLogin()

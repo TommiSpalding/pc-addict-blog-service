@@ -1,12 +1,12 @@
 window.addEventListener('load', () => {
 
-    document.write("<br>");
+    document.body.appendChild(document.createElement('br'));
     let title = addElementFieldTo(document.body, "title", "input");
-    document.write("<br>");
+    document.body.appendChild(document.createElement('br'));
     let author = addElementFieldTo(document.body, "author", "input");
-    document.write("<br>");
+    document.body.appendChild(document.createElement('br'));
     let textBody = addElementFieldTo(document.body, "textBody", "textarea");
-    document.write("<br>");
+    document.body.appendChild(document.createElement('br'));
 
     textBody.style.height = "500px";
     
@@ -15,13 +15,21 @@ window.addEventListener('load', () => {
     b.addEventListener('click',() => {
 
         fetch('http://localhost:8080/blogposts', { 
+
             method: 'POST', 
-            body: JSON.stringify({ 
+            body: JSON.stringify({
+
                 title: title.value,
                 textBody: textBody.value,
                 authorName: author.value
-            }), 
-            headers: new Headers({ 'Content-Type': 'application/json'}) }).then((r) => { console.log(r); window.location.reload(false); }); });
+            }),
+            headers: new Headers({ 'Content-Type': 'application/json'}) }).then((r) => { console.log(r); window.location.reload(false); }); 
+    });
+    
+    document.body.appendChild(document.createElement('br'));
+    document.body.appendChild(document.createElement('br'));
+
+    createBlogpostTable(document.body);
 });
 
 function addElementFieldTo(to, title, e) {
@@ -39,8 +47,40 @@ function addElementFieldTo(to, title, e) {
     label.setAttribute("style", "font-weight:normal");
 
     to.appendChild(label);
-    document.write("<br>");
+    document.body.appendChild(document.createElement('br'));
     to.appendChild(element);
 
     return element;
+}
+
+function createBlogpostTable(e) {
+
+    let tbl  = document.createElement('table');
+
+    tbl.style.border = '1px solid black';
+
+    tbl.setAttribute('id','table1');
+
+    let tr = tbl.insertRow();
+    tr.insertCell().appendChild(document.createTextNode('#'));
+    tr.insertCell().appendChild(document.createTextNode('title'));
+    tr.insertCell().appendChild(document.createTextNode('author'));
+    tr.insertCell().appendChild(document.createTextNode('act'));
+
+    fetch('http://localhost:8080/blogposts').then((response) => response.json()).then((arr) => {
+
+        for(let j = 0; j < arr.length; j++) {
+
+            let tr = tbl.insertRow();
+    
+            tr.insertCell().appendChild(document.createTextNode(j + 1));
+            tr.insertCell().appendChild(document.createTextNode(arr[j].title));
+            tr.insertCell().appendChild(document.createTextNode(arr[j].authorName));
+            let b = tr.insertCell().appendChild(document.createElement('button'));
+            b.innerHTML = 'DELET';
+            b.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+        }
+    });
+
+    e.appendChild(tbl);
 }
