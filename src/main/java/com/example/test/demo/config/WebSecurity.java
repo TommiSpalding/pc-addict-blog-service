@@ -2,6 +2,7 @@ package com.example.test.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,7 +21,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .authorizeRequests()
             .antMatchers("/admin.html").authenticated()
-            .anyRequest().permitAll()
+            .antMatchers(HttpMethod.POST, "/**").authenticated()
+            .antMatchers(HttpMethod.DELETE, "/**").authenticated()
+            .antMatchers(HttpMethod.GET, "/**").permitAll()
             .and()
             .formLogin()
             .loginPage("/login.html").defaultSuccessUrl("/admin.html")

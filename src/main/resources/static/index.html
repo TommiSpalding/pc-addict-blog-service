@@ -16,7 +16,7 @@ delete article with id 1 again (doesnt exist):
 curl -v -X DELETE http://localhost:8080/articles/1
 
 post new article: 
-curl -v -H "Content-type: application/json" -X POST -d "{\"headline\": \"test\", \"content\": \"test content\", \"publisher\": \"me\"}" http://localhost:8080/articles
+curl -v -H "Content-type: application/json" -X POST -d "{\"title\": \"test\", \"textBody\": \"test content\", \"authorName\": \"me\"}" http://localhost:8080/blogposts
 
 </pre>
 
