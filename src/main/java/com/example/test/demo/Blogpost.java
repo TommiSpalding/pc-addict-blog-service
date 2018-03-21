@@ -15,7 +15,7 @@ public class Blogpost {
 
     private String title;
 
-    private String textbody;
+    private String textBody;
 
     @Column(name="author_name")
     private String authorName;
@@ -32,10 +32,10 @@ public class Blogpost {
         setTimePosted(Instant.now().getEpochSecond());
     }
 
-    public Blogpost(String title, String textbody, String authorName) {
+    public Blogpost(String title, String textBody, String authorName) {
 
         setTitle(title);
-        setTextbody(textbody);
+        setTextBody(textBody);
         setAuthorName(authorName);
         setTimePosted(Instant.now().getEpochSecond());
     }
@@ -56,12 +56,12 @@ public class Blogpost {
         this.title = title;
     }
 
-    public String getTextbody() {
-        return textbody;
+    public String getTextBody() {
+        return textBody;
     }
 
-    public void setTextbody(String textbody) {
-        this.textbody = textbody;
+    public void setTextBody(String textbody) {
+        this.textBody = textbody;
     }
 
     public String getAuthorName() {
