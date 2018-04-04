@@ -10,6 +10,8 @@ public class Comment {
     @Column(name="comment_id")
     private long id;
 
+    private int likes;
+
     private String author;
 
     private String textbody;
@@ -80,4 +82,16 @@ public class Comment {
     //public void setBlogpost(Blogpost blogpost) {
     //    this.blogpost = blogpost;
     //}
+
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void addLike() { likes++; }
+    public void removeLike() { likes--; }
 }

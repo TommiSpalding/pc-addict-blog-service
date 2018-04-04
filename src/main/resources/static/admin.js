@@ -1,35 +1,45 @@
 window.addEventListener('load', () => {
 
-    document.body.appendChild(document.createElement('br'));
-    let title = addElementFieldTo(document.body, "title", "input");
-    document.body.appendChild(document.createElement('br'));
-    let author = addElementFieldTo(document.body, "author", "input");
-    document.body.appendChild(document.createElement('br'));
-    let textBody = addElementFieldTo(document.body, "textBody", "textarea");
-    document.body.appendChild(document.createElement('br'));
+    if(typeof(Storage) !== "undefined") {
 
-    textBody.style.height = "500px";
+        document.body.appendChild(document.createElement('br'));
+        let title = addElementFieldTo(document.body, "title", "input");
+        document.body.appendChild(document.createElement('br'));
+        let author = addElementFieldTo(document.body, "author", "input");
+        document.body.appendChild(document.createElement('br'));
+        let textBody = addElementFieldTo(document.body, "textBody", "textarea");
+        document.body.appendChild(document.createElement('br'));
     
-    let b = document.body.appendChild(document.createElement('button'));
-    b.innerHTML = 'POST';
-    b.addEventListener('click',() => {
-
-        fetch('http://localhost:8080/blogposts', { 
-
-            method: 'POST', 
-            body: JSON.stringify({
-
-                title: title.value,
-                textBody: textBody.value,
-                authorName: author.value
-            }),
-            headers: new Headers({ 'Content-Type': 'application/json'}) }).then((r) => { console.log(r); window.location.reload(false); }); 
-    });
+        textBody.style.height = "500px";
+        
+        let b = document.body.appendChild(document.createElement('button'));
+        b.innerHTML = 'POST';
+        b.addEventListener('click',() => {
     
-    document.body.appendChild(document.createElement('br'));
-    document.body.appendChild(document.createElement('br'));
+            fetch('http://localhost:8080/blogposts', { 
+    
+                method: 'POST', 
+                body: JSON.stringify({
+    
+                    title: title.value,
+                    textBody: textBody.value,
+                    authorName: author.value
+                }),
+                headers: new Headers({ 'Content-Type': 'application/json'}) }).then((r) => { console.log(r); window.location.reload(false); }); 
+        });
+        
+        document.body.appendChild(document.createElement('br'));
+        document.body.appendChild(document.createElement('br'));
+    
+        createBlogpostTable(document.body);
+        
+    } else {
 
-    createBlogpostTable(document.body);
+        let a = document.createElement('h1');
+        a.innerHTML = "GET A MODERN BROWSER THAT SUPPORTS HTML5"
+
+        document.body.appendChild(a);
+    }
 });
 
 function addElementFieldTo(to, title, e) {
@@ -79,6 +89,35 @@ function createBlogpostTable(e) {
             let b = tr.insertCell().appendChild(document.createElement('button'));
             b.innerHTML = 'DELET';
             b.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+
+            for(let l = 0; l < arr[j].comments.length; l++) {
+
+                let arrr = arr[j].comments;
+
+                let tr1 = tbl.insertRow();
+        
+                tr1.insertCell().appendChild(document.createTextNode(l + 1));
+                tr1.insertCell().appendChild(document.createTextNode(arrr[l].author));
+                tr1.insertCell().appendChild(document.createTextNode(arrr[l].likes));
+                let b1 = tr1.insertCell().appendChild(document.createElement('button'));
+                b1.innerHTML = 'DELET';
+                b1.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id + '/comments/' + arrr[l].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+
+                let b2 = tr1.insertCell().appendChild(document.createElement('button'));
+                let item = "b" + arr[j].id + "c" + arrr[l].id;
+
+                if(localStorage.getItem(item) == undefined || localStorage.getItem(item) == null || localStorage.getItem(item) == "" || localStorage.getItem(item) == 'no') {
+
+                    b2.innerHTML = 'LIKE';
+                    b2.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id + '/comments/' + l + '/like', { method: 'post', body: 'yes' }).then(() => { window.location.reload(false); localStorage.setItem(item, 'yes'); }); });
+
+                } else if(localStorage.getItem(item) == 'yes') {
+
+                    b2.innerHTML = 'DONT';
+                    b2.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id + '/comments/' + l + '/like', { method: 'post', body: 'no' }).then(() => { window.location.reload(false); localStorage.setItem(item, 'no'); }); });
+
+                }
+            }
         }
     });
 

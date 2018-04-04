@@ -201,4 +201,29 @@ public class RestController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}/like", method = RequestMethod.POST)
+    public ResponseEntity<Void> postLike(@PathVariable long blogpostsId, @PathVariable int id, @RequestBody String str, UriComponentsBuilder b) throws CannotFindBlogpostException, CannotFindCommentException {
+
+        Optional<Blogpost> opt = repo.findById(blogpostsId);
+
+        if (!opt.isPresent()) throw new CannotFindBlogpostException(blogpostsId);
+
+        Blogpost blogpost = opt.get();
+
+        Optional<Comment> c = blogpost.getComment(id);
+
+        if (!c.isPresent()) throw new CannotFindCommentException(id);
+
+        Comment comment = c.get();
+
+        if(str.equals("yes"))
+            comment.addLike();
+        else if(str.equals("no"))
+            comment.removeLike();
+
+        repo.save(blogpost);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
