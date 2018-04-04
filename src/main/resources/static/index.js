@@ -4,7 +4,7 @@ function Blogpost(properties) {
         <div className="card-body">
             <h2 className="card-title">{properties.title}</h2>
             <p className="card-text">{properties.textBody}</p>
-            <a href="#" class="btn btn-primary">Read More &rarr;</a>
+            <a href="#" class="btn btn-primary" value={properties.id} onClick={() => showFullBlogpost(properties.id)}>Read More &rarr;</a>
         </div>
         <div className="card-footer text-muted">
             {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
@@ -12,13 +12,53 @@ function Blogpost(properties) {
     </div>;
 }
 
+function FullBlogpost(properties) {
+    return <div>
+        <div className="card mb-4">
+            <img className="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"/>
+            <div className="card-body">
+                <h2 className="card-title">{properties.title}</h2>
+                <p className="card-text">{properties.textBody}</p>
+                <a href="#" class="btn btn-primary">Read More &rarr;</a>
+            </div>
+            <div className="card-footer text-muted">
+                {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
+            </div>
+        </div>
+        <h4>Comments to this post</h4>
+        <ManyComments array={properties.comments}/>
+    </div>
+}
+
+function Comment(properties) {
+    return <div className="card mb-3">
+       <div className="card-body">
+           <p className="card-text">{properties.textBody}</p>
+       </div>
+       <div className="card-footer text-muted">
+           {new Date(Number(properties.timePosted)*1000).toDateString()} by {properties.authorName}
+       </div>
+    </div>;
+}
+
+function ManyComments(properties) {
+    let arr = properties.array
+    let output = []
+
+    for(let j = 0; j < arr.length; j++) {
+        console.log(arr[j])
+        output.push(<Comment textBody={arr[j].textbody} timePosted={arr[j].timePosted} authorName={arr[j].author}/>)
+    }
+
+    return <div>{output}</div>
+}
+
 function ManyBlogposts(properties) {
     let arr = properties.array
     let output = []
 
-
     for(let j = 0; j < arr.length; j++) {
-        output.push(<Blogpost title={arr[j].title} textBody={arr[j].textBody} timePosted={arr[j].timePosted} authorName={arr[j].authorName}/>)
+        output.push(<Blogpost title={arr[j].title} textBody={arr[j].textBody} timePosted={arr[j].timePosted} authorName={arr[j].authorName} id={arr[j].id}/>)
     }
 
     return <div>{output}</div>
@@ -37,14 +77,18 @@ function blogpostsByAuthorName(authorName) {
 }
 
 function blogpostsByTitle(titleName) {
-    console.log('paska paska paska')
     fetch(`http://localhost:8080/blogposts/search?q=${titleName}`).then((response) => response.json()).then((arr) => {
         ReactDOM.render(<ManyBlogposts array={arr}/>,document.getElementById("blogposts"));
     });
 }
 
+function showFullBlogpost(id) {
+    fetch(`http://localhost:8080/blogposts/${Number(id)}`).then((response) => response.json()).then((post) => {
+        ReactDOM.render(<FullBlogpost title={post.title} textBody={post.textBody} timePosted={post.timePosted} authorName={post.authorName} id={post.id} comments={post.comments}/>,document.getElementById("blogposts"));
+    });
+}
+
 function searchTitle() {
-    console.log('vittu vittu vittu')
     let title = document.getElementById('searchInput').value;
     blogpostsByTitle(title);
 }
