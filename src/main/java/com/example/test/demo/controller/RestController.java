@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -73,6 +70,48 @@ public class RestController {
         repo.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/blogposts/search", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Blogpost>> search(@RequestParam(value = "q", required = false) String search) {
+
+        Iterable<Blogpost> blogposts = null;
+
+        if(search == null || search == "")
+            return new ResponseEntity<>(blogposts, HttpStatus.NOT_FOUND);
+
+        blogposts = repo.findByTextBodyContainingIgnoreCaseOrTitleContainingIgnoreCaseOrAuthorNameContainingIgnoreCase(search, search, search);
+
+        HttpStatus status = HttpStatus.OK;
+
+        int size = 0;
+        for(Blogpost value : blogposts) { size++; }
+
+        if(size == 0)
+            status = HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(blogposts, status);
+    }
+
+    @RequestMapping(value = "/blogposts/searchAuthor", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Blogpost>> searchAuthor(@RequestParam(value = "q", required = false) String search) {
+
+        Iterable<Blogpost> blogposts = null;
+
+        if(search == null || search == "")
+            return new ResponseEntity<>(blogposts, HttpStatus.NOT_FOUND);
+
+        blogposts = repo.findByAuthorNameContainingIgnoreCase(search);
+
+        HttpStatus status = HttpStatus.OK;
+
+        int size = 0;
+        for(Blogpost value : blogposts) { size++; }
+
+        if(size == 0)
+            status = HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(blogposts, status);
     }
 
     //#############################################Comments###################################################
