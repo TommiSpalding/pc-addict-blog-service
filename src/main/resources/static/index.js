@@ -19,7 +19,6 @@ function FullBlogpost(properties) {
             <div className="card-body">
                 <h2 className="card-title">{properties.title}</h2>
                 <p className="card-text">{properties.textBody}</p>
-                <a href="#" class="btn btn-primary">Read More &rarr;</a>
             </div>
             <div className="card-footer text-muted">
                 {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
@@ -27,6 +26,7 @@ function FullBlogpost(properties) {
         </div>
         <h4>Comments to this post</h4>
         <ManyComments array={properties.comments}/>
+        <a href="#" className="btn btn-success" id="postCommentButton">Post a Comment!</a>
     </div>
 }
 
