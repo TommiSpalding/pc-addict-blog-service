@@ -1,6 +1,6 @@
 function Blogpost(properties) {
     return <div className="card mb-4">
-        <img className="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"/>
+        <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
         <div className="card-body">
             <h2 className="card-title">{properties.title}</h2>
             <p className="card-text">{properties.textBody}</p>
