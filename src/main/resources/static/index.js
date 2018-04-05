@@ -33,9 +33,11 @@ function FullBlogpost(properties) {
 function Comment(properties) {
     return <div className="card mb-3">
        <div className="card-body">
-           <p className="card-text">{properties.textBody}</p>
+           <p className="card-text float-left">{properties.textBody}</p>
+           <div className="float-right"><a href="#" className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id) }>Like!</a></div>
        </div>
-       <a href="#" className="btn btn-primary float-right">Like *HEART*</a>
+
+
        <div className="card-footer text-muted">
            <div className="float-left">
            {new Date(Number(properties.timePosted)*1000).toDateString()} by {properties.authorName}
@@ -77,6 +79,13 @@ function ManyBlogposts(properties) {
     }
 
     return <div>{output}</div>
+}
+
+function likeComment(parentId, id) {
+    console.log('ebin paskaa')
+    console.log(parentId)
+    console.log(id)
+    fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(showFullBlogpost(parentId));
 }
 
 function allBlogposts() {
