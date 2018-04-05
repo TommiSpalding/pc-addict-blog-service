@@ -34,7 +34,7 @@ function Comment(properties) {
     return <div className="card mb-3">
        <div className="card-body">
            <p className="card-text float-left">{properties.textBody}</p>
-           <div className="float-right"><a href="#" className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id) }>Like!</a></div>
+           <div className="float-right"><button href="#" className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id) }>Like!</button></div>
        </div>
 
 
