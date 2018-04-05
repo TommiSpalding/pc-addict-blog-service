@@ -31,21 +31,45 @@ function FullBlogpost(properties) {
 }
 
 function Comment(properties) {
-    return <div className="card mb-3">
-       <div className="card-body">
-           <p className="card-text float-left">{properties.textBody}</p>
-           <div className="float-right"><a href="#" className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id) }>Like!</a></div>
-       </div>
+
+    let item = "b" + properties.parent.id + "c" + properties.realid;
+
+    if(localStorage.getItem(item) == undefined || localStorage.getItem(item) == null || localStorage.getItem(item) == "" || localStorage.getItem(item) == 'no') {
+
+        return <div className="card mb-3">
+                <div className="card-body">
+                    <p className="card-text float-left">{properties.textBody}</p>
+                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id, item, true) }>Like!</button></div>
+                </div>
 
 
-       <div className="card-footer text-muted">
-           <div className="float-left">
-           {new Date(Number(properties.timePosted)*1000).toDateString()} by {properties.authorName}
-           </div>
-           <div className="float-right">Likes: {properties.likes}</div>
-           <div className="clearfix"></div>
-       </div>
-    </div>;
+                <div className="card-footer text-muted">
+                    <div className="float-left">
+                    {new Date(Number(properties.timePosted)*1000).toDateString()} by {properties.authorName}
+                    </div>
+                    <div className="float-right">Likes: {properties.likes}</div>
+                    <div className="clearfix"></div>
+                </div>
+        </div>;
+
+    } else if(localStorage.getItem(item) == 'yes') {
+
+        return <div className="card mb-3">
+                <div className="card-body">
+                    <p className="card-text float-left">{properties.textBody}</p>
+                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id, item, false) }>Dont!</button></div>
+                </div>
+
+
+                <div className="card-footer text-muted">
+                    <div className="float-left">
+                    {new Date(Number(properties.timePosted)*1000).toDateString()} by {properties.authorName}
+                    </div>
+                    <div className="float-right">Likes: {properties.likes}</div>
+                    <div className="clearfix"></div>
+                </div>
+        </div>;
+    }
 }
 
 function ManyComments(properties) {
@@ -59,6 +83,7 @@ function ManyComments(properties) {
         authorName={arr[j].author}
         likes={arr[j].likes}
         id={j}
+        realid={arr[j].id}
         parent={properties.parent}/>)
     }
 
@@ -81,11 +106,15 @@ function ManyBlogposts(properties) {
     return <div>{output}</div>
 }
 
-function likeComment(parentId, id) {
+function likeComment(parentId, id, item, bool) {
     console.log('ebin paskaa')
     console.log(parentId)
     console.log(id)
-    fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => { showFullBlogpost(parentId) });
+
+    if(!bool)
+        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'no' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'no'); });
+    else
+        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'yes'); });
 }
 
 function allBlogposts() {
