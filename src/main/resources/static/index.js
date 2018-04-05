@@ -25,7 +25,7 @@ function FullBlogpost(properties) {
             </div>
         </div>
         <h4>Comments to this post</h4>
-        <ManyComments array={properties.comments}/>
+        <ManyComments array={properties.comments} parent={properties.id}/>
         <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
     </div>
 }
@@ -58,7 +58,7 @@ function ManyComments(properties) {
         timePosted={arr[j].timePosted}
         authorName={arr[j].author}
         likes={arr[j].likes}
-        id={arr[j].id}
+        id={j}
         parent={properties.parent}/>)
     }
 
@@ -85,7 +85,7 @@ function likeComment(parentId, id) {
     console.log('ebin paskaa')
     console.log(parentId)
     console.log(id)
-    fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(showFullBlogpost(parentId));
+    fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => { showFullBlogpost(parentId) });
 }
 
 function allBlogposts() {
