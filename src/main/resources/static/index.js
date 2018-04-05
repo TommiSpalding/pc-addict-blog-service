@@ -142,7 +142,7 @@ function postComment() {
 
         headers: new Headers({ 'Content-Type': 'application/json'})
 
-    }).then((r) => { window.location.reload(false); });
+    }).then(() => { showFullBlogpost(document.thisIsNotGood) });
 }
 
 allBlogposts();
