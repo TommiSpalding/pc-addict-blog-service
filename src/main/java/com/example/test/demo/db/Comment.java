@@ -14,6 +14,7 @@ public class Comment {
 
     private String author;
 
+    @Lob
     private String textbody;
 
     @Column(name="time_posted")
