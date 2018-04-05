@@ -15,6 +15,7 @@ public class Blogpost {
 
     private String title;
 
+    @Lob
     private String textBody;
 
     @Column(name="author_name")

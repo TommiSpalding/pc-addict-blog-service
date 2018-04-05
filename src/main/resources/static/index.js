@@ -25,8 +25,8 @@ function FullBlogpost(properties) {
             </div>
         </div>
         <h4>Comments to this post</h4>
-        <ManyComments array={properties.comments} parent={properties.id}/>
-        <a href="#" className="btn btn-success" id="postCommentButton">Post a Comment!</a>
+        <ManyComments array={properties.comments}/>
+        <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
     </div>
 }
 
@@ -111,6 +111,29 @@ function showFullBlogpost(id) {
 function searchTitle() {
     let title = document.getElementById('searchInput').value;
     blogpostsByTitle(title);
+}
+
+function prePost(id) {
+
+    document.thisIsNotGood = id;
+}
+
+function postComment() {
+
+    fetch('http://localhost:8080/blogposts/' + document.thisIsNotGood + '/comments', {
+
+        method: 'POST',
+
+        body: JSON.stringify({
+
+            author: document.getElementById("commentAuthor").value,
+            textbody: document.getElementById("commentTextBody").value,
+            likes: 0
+        }),
+
+        headers: new Headers({ 'Content-Type': 'application/json'})
+
+    }).then((r) => { window.location.reload(false); });
 }
 
 allBlogposts();

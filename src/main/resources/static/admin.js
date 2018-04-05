@@ -101,7 +101,7 @@ function createBlogpostTable(e) {
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].likes));
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
                 b1.innerHTML = 'DELET';
-                b1.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id + '/comments/' + arrr[l].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+                b1.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].id + '/comments/' + l, { method: 'delete' }).then(() => { window.location.reload(false); }); });
 
                 let b2 = tr1.insertCell().appendChild(document.createElement('button'));
                 let item = "b" + arr[j].id + "c" + arrr[l].id;
