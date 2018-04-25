@@ -24,9 +24,9 @@ function FullBlogpost(properties) {
                 {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
             </div>
         </div>
-        <h4 class="text-white">Comments to this post</h4>
+        <p class="text-white">Comments to this post</p>
         <ManyComments array={properties.comments} parentId={properties.id}/>
-        <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
+        <button type="button" className="btn btn-success text-center" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
     </div>
 }
 
