@@ -10,7 +10,7 @@ public class Comment extends ResourceSupport {
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="comment_id")
-    private long id;
+    private Long id;
 
     private int likes;
 
