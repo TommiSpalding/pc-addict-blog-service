@@ -25,11 +25,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         //cors and csrf disabled for simplicity
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/admin.html").authenticated()
-                .antMatchers(HttpMethod.POST, "/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/blogposts/*/comments").permitAll()
                 .antMatchers(HttpMethod.POST, "/blogposts/*/comments/*/like").permitAll()
+                .antMatchers(HttpMethod.POST, "/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/**").authenticated()
                 .anyRequest().permitAll()
                 .and().logout().logoutSuccessUrl("/").permitAll();
