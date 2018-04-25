@@ -95,19 +95,19 @@ function ManyBlogposts(properties) {
     let output = []
 
     for(let j = 0; j < arr.length; j++) {
+
         output.push(<Blogpost
         title={arr[j].title}
         textBody={arr[j].textBody}
         timePosted={arr[j].timePosted}
         authorName={arr[j].authorName}
-        id={arr[j].id}/>)
+        id={arr[j].blogId}/>)
     }
 
     return <div>{output}</div>
 }
 
 function likeComment(parentId, id, item, bool) {
-    console.log('ebin paskaa')
     console.log(parentId)
     console.log(id)
 
@@ -142,7 +142,7 @@ function showFullBlogpost(id) {
         textBody={post.textBody}
         timePosted={post.timePosted}
         authorName={post.authorName}
-        id={post.id} comments={post.comments}/>,document.getElementById("blogposts"));
+        id={post.blogId} comments={post.comments}/>,document.getElementById("blogposts"));
     });
 }
 
