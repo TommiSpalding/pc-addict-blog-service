@@ -135,19 +135,15 @@ function preModify(id) {
 
     fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + id).then((response) => response.json()).then((arr) => {
 
-        console.log(arr);
-
         document.getElementById('modifyTitle').setAttribute('value', arr.title);
         document.getElementById('modifyAuthor').setAttribute('value', arr.authorName);
-        document.getElementById('modifyTextBody').setAttribute('value', arr.textBody);
+        document.getElementById('modifyTextBody').innerHTML = arr.textBody;
     });
 
     document.thisIsNotGood = id;
 }
 
 function modifyPost() {
-
-    console.log(document.thisIsNotGood);
 
     fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + document.thisIsNotGood, {
 
