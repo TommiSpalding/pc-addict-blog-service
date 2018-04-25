@@ -13,7 +13,8 @@ function Blogpost(properties) {
 }
 
 function FullBlogpost(properties) {
-    return <div>
+    return
+    <div>
         <div className="card my-4">
             <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
             <div className="card-body">
@@ -24,9 +25,13 @@ function FullBlogpost(properties) {
                 {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
             </div>
         </div>
-        <p class="text-white">Comments to this post</p>
+        <div class="text-white">
+            <h3>Comments to this post</h3>
+        </div>
         <ManyComments array={properties.comments} parentId={properties.id}/>
-        <button type="button" className="btn btn-success text-center" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
+        <div class="text-center">
+            <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
+        </div>
     </div>
 }
 
