@@ -100,7 +100,7 @@ function createBlogpostTable(e) {
             let b = tr.insertCell().appendChild(document.createElement('button'));
             b.setAttribute('class','btn btn-danger');
             b.innerHTML = 'DELETE';
-            b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+            b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
 
             let b2 = tr.insertCell().appendChild(document.createElement('button'));
             b2.setAttribute('class','btn btn-primary');
@@ -115,7 +115,7 @@ function createBlogpostTable(e) {
 
                 let tr1 = tbl.insertRow();
 
-                let javascriptisfun = arrr[l].commentId;
+                let javascriptisfun = l;
         
                 tr1.insertCell().appendChild(document.createTextNode('c' + javascriptisfun));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].author));
@@ -123,7 +123,7 @@ function createBlogpostTable(e) {
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
                 b1.setAttribute('class','btn btn-danger');
                 b1.innerHTML = 'DELETE';
-                b1.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId + '/comments/' + arrr[l].commentId, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+                b1.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId + '/comments/' + l, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
             }
         }
     });
