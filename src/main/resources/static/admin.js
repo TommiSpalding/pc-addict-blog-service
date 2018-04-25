@@ -102,11 +102,10 @@ function createBlogpostTable(e) {
             b.innerHTML = 'DELETE';
             b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
 
-            let b2 = tr1.insertCell().appendChild(document.createElement('button'));
+            let b2 = tr.insertCell().appendChild(document.createElement('button'));
             b2.setAttribute('class','btn btn-primary');
             b2.setAttribute('data-toggle','modal');
             b2.setAttribute('data-target','modifyPostModal');
-            let item = "b" + arr[j].id;
             b2.innerHTML = 'MODIFY';
             b2.addEventListener('click', () => { preModify(arr[j].id); });
 
