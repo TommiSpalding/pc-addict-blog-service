@@ -130,7 +130,7 @@ public class RestController {
     //#############################################Comments###################################################
 
 
-    //is this needed?????????????
+    //is this needed????????????? yes is!!!!!!!!!!!!!!!!!
     @Autowired
     private CommentRepository cRepo;
 
@@ -167,7 +167,10 @@ public class RestController {
         HttpStatus status = HttpStatus.OK;
 
         int size = 0;
-        for(Comment value : comments) { size++; }
+        for(Comment value : comments) {
+            addHATEOAStoComment(value, blogpost, size);
+            size++;
+        }
 
         if(size == 0)
             status = HttpStatus.NOT_FOUND;
@@ -189,6 +192,7 @@ public class RestController {
         if (!c.isPresent()) throw new CannotFindCommentException(id);
 
         Comment comment = c.get();
+        addHATEOAStoComment(comment, blogpost, id);
 
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
@@ -216,7 +220,7 @@ public class RestController {
     }
 
     @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}/like", method = RequestMethod.POST)
-    public ResponseEntity<Void> postLike(@PathVariable long blogpostsId, @PathVariable int id, @RequestBody String str, UriComponentsBuilder b) throws CannotFindBlogpostException, CannotFindCommentException {
+    public ResponseEntity<Void> postLike(@PathVariable long blogpostsId, @PathVariable int id, @RequestBody String str/*, UriComponentsBuilder b*/) throws CannotFindBlogpostException, CannotFindCommentException {
 
         Optional<Blogpost> opt = repo.findById(blogpostsId);
 
@@ -261,9 +265,7 @@ public class RestController {
             blogPost.add(commentsLink);
 
             for (int i = 0; i < blogPost.getComments().size(); i++) {
-                selfLink = ControllerLinkBuilder.linkTo(RestController.class)
-                        .slash("blogposts").slash(blogPost.getBlogId()).slash("comments").slash(i).withSelfRel();
-                blogPost.getComments().get(i).add(selfLink);
+                addHATEOAStoComment(blogPost.getComments().get(i), blogPost, i);
             }
         }
     }
@@ -273,7 +275,14 @@ public class RestController {
      *
      * @param comment comment to add to
      */
-    public void addHATEOAStoComment(Comment comment, Blogpost parent) {
-        if (comment == null) return;
+    public void addHATEOAStoComment(Comment comment, Blogpost parent, int id) {
+        if (comment == null || parent == null) return;
+        Link selfLink = ControllerLinkBuilder.linkTo(RestController.class)
+                .slash("blogposts").slash(parent.getBlogId()).slash("comments").slash(id).withSelfRel();
+        comment.add(selfLink);
+
+        Link likeLink = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class)
+                .postLike(parent.getBlogId(), id, "yes/no")).withRel("like");
+        comment.add(likeLink);
     }
 }
