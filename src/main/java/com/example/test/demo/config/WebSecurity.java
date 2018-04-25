@@ -1,5 +1,6 @@
 package com.example.test.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,18 +22,23 @@ import java.util.Collections;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private AuthenticationEntryPoint authEntryPoint;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.cors().disable().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/", "/**.css", "/**.js", "/**.jpg", "/**.ico", "/blogposts/**", "/blogposts/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/logout").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/**.css", "/index.js", "/**.jpg", "/**.ico", "/blogposts/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/blogposts/*/comments").permitAll()
                 .antMatchers(HttpMethod.POST, "/blogposts/*/comments/*/like").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login.html").defaultSuccessUrl("/admin.html").permitAll()
-                .and().logout().logoutSuccessUrl("/").permitAll();
+                .and().httpBasic()
+                .authenticationEntryPoint(authEntryPoint);
+        /*
+        formLogin().loginPage("/login.html").permitAll()
+                .and().logout().logoutSuccessUrl("/").permitAll();*/
     }
 
     @Bean

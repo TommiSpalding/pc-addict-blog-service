@@ -113,31 +113,31 @@ function likeComment(parentId, id, item, bool) {
     console.log(id)
 
     if(!bool)
-        fetch(`https://pc-addict-blog.herokuapp.com/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'no' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'no'); });
+        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'no' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'no'); });
     else
-        fetch(`https://pc-addict-blog.herokuapp.com/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'yes'); });
+        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'yes'); });
 }
 
 function allBlogposts() {
-    fetch('https://pc-addict-blog.herokuapp.com/blogposts').then((response) => response.json()).then((arr) => {
+    fetch('http://localhost:8080/blogposts').then((response) => response.json()).then((arr) => {
         ReactDOM.render(<ManyBlogposts array={arr}/>,document.getElementById("blogposts"));
     });
 }
 
 function blogpostsByAuthorName(authorName) {
-    fetch(`https://pc-addict-blog.herokuapp.com/blogposts/searchAuthor?q=${authorName}`).then((response) => response.json()).then((arr) => {
+    fetch(`http://localhost:8080/blogposts/searchAuthor?q=${authorName}`).then((response) => response.json()).then((arr) => {
         ReactDOM.render(<ManyBlogposts array={arr}/>,document.getElementById("blogposts"));
     });
 }
 
 function blogpostsByTitle(titleName) {
-    fetch(`https://pc-addict-blog.herokuapp.com/blogposts/search?q=${titleName}`).then((response) => response.json()).then((arr) => {
+    fetch(`http://localhost:8080/blogposts/search?q=${titleName}`).then((response) => response.json()).then((arr) => {
         ReactDOM.render(<ManyBlogposts array={arr}/>,document.getElementById("blogposts"));
     });
 }
 
 function showFullBlogpost(id) {
-    fetch(`https://pc-addict-blog.herokuapp.com/blogposts/${Number(id)}`).then((response) => response.json()).then((post) => {
+    fetch(`http://localhost:8080/blogposts/${Number(id)}`).then((response) => response.json()).then((post) => {
         ReactDOM.render(<FullBlogpost
         title={post.title}
         textBody={post.textBody}
@@ -159,7 +159,7 @@ function prePost(id) {
 
 function postComment() {
 
-    fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + document.thisIsNotGood + '/comments', {
+    fetch('http://localhost:8080/blogposts/' + document.thisIsNotGood + '/comments', {
 
         method: 'POST',
 
