@@ -25,21 +25,21 @@ function FullBlogpost(properties) {
             </div>
         </div>
         <h4>Comments to this post</h4>
-        <ManyComments array={properties.comments} parent={properties.id}/>
+        <ManyComments array={properties.comments} parentId={properties.id}/>
         <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
     </div>
 }
 
 function Comment(properties) {
 
-    let item = "b" + properties.parent.id + "c" + properties.realid;
+    let item = "b" + properties.parentId + "c" + properties.realid;
 
     if(localStorage.getItem(item) == undefined || localStorage.getItem(item) == null || localStorage.getItem(item) == "" || localStorage.getItem(item) == 'no') {
 
         return <div className="card mb-3">
                 <div className="card-body">
                     <p className="card-text float-left">{properties.textBody}</p>
-                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id, item, true) }>Like!</button></div>
+                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parentId} onClick={() => likeComment(properties.parentId, properties.id, item, true) }>Like!</button></div>
                 </div>
 
 
@@ -57,7 +57,7 @@ function Comment(properties) {
         return <div className="card mb-3">
                 <div className="card-body">
                     <p className="card-text float-left">{properties.textBody}</p>
-                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parent} onClick={() => likeComment(properties.parent, properties.id, item, false) }>Dont!</button></div>
+                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parentId} onClick={() => likeComment(properties.parentId, properties.id, item, false) }>Dont!</button></div>
                 </div>
 
 
@@ -77,14 +77,15 @@ function ManyComments(properties) {
     let output = []
 
     for(let j = 0; j < arr.length; j++) {
+        console.log(arr[j])
         output.push(<Comment
         textBody={arr[j].textbody}
         timePosted={arr[j].timePosted}
         authorName={arr[j].author}
         likes={arr[j].likes}
         id={j}
-        realid={arr[j].id}
-        parent={properties.parent}/>)
+        realid={arr[j].commentId}
+        parentId={properties.parentId}/>)
     }
 
     return <div>{output}</div>
