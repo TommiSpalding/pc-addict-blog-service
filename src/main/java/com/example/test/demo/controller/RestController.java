@@ -46,21 +46,7 @@ public class RestController {
 
         int size = 0;
         for(Blogpost value : blogposts) {
-            Link selfLink = ControllerLinkBuilder.linkTo(RestController.class).slash("blogposts").slash(value.getBlogId()).withSelfRel();
-            value.add(selfLink);
-
-            if (value.getComments().size() > 0) {
-                Link commentsLink = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class)
-                        .getComments(value.getBlogId())).withRel("allComments");
-                value.add(commentsLink);
-
-                for (int i = 0; i < value.getComments().size(); i++) {
-                    selfLink = ControllerLinkBuilder.linkTo(RestController.class)
-                            .slash("blogposts").slash(value.getBlogId()).slash("comments").slash(i).withSelfRel();
-                    value.getComments().get(i).add(selfLink);
-                }
-            }
-
+            addHATEOAStoBlogpost(value);
             size++;
         }
 
@@ -78,6 +64,7 @@ public class RestController {
         if (!opt.isPresent()) throw new CannotFindBlogpostException(id);
 
         Blogpost blogpost = opt.get();
+        addHATEOAStoBlogpost(blogpost);
 
         return new ResponseEntity<>(blogpost, HttpStatus.OK);
     }
@@ -105,7 +92,10 @@ public class RestController {
         HttpStatus status = HttpStatus.OK;
 
         int size = 0;
-        for(Blogpost value : blogposts) { size++; }
+        for(Blogpost value : blogposts) {
+            addHATEOAStoBlogpost(value);
+            size++;
+        }
 
         if(size == 0)
             status = HttpStatus.NOT_FOUND;
@@ -126,7 +116,10 @@ public class RestController {
         HttpStatus status = HttpStatus.OK;
 
         int size = 0;
-        for(Blogpost value : blogposts) { size++; }
+        for(Blogpost value : blogposts) {
+            addHATEOAStoBlogpost(value);
+            size++;
+        }
 
         if(size == 0)
             status = HttpStatus.NOT_FOUND;
@@ -245,5 +238,42 @@ public class RestController {
         repo.save(blogpost);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Adds HATEOAS to a blogpost.
+     *
+     * @param blogPost blogpost to add to
+     */
+    public void addHATEOAStoBlogpost(Blogpost blogPost) {
+        if (blogPost == null) return;
+
+        Link selfLink = ControllerLinkBuilder.linkTo(RestController.class).slash("blogposts").slash(blogPost.getBlogId()).withSelfRel();
+        blogPost.add(selfLink);
+
+        Link searchLink = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class)
+                .search("keyword")).withRel("search");
+        blogPost.add(searchLink);
+
+        if (blogPost.getComments().size() > 0) {
+            Link commentsLink = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class)
+                    .getComments(blogPost.getBlogId())).withRel("allComments");
+            blogPost.add(commentsLink);
+
+            for (int i = 0; i < blogPost.getComments().size(); i++) {
+                selfLink = ControllerLinkBuilder.linkTo(RestController.class)
+                        .slash("blogposts").slash(blogPost.getBlogId()).slash("comments").slash(i).withSelfRel();
+                blogPost.getComments().get(i).add(selfLink);
+            }
+        }
+    }
+
+    /**
+     * Adds HATEOAS to a comment.
+     *
+     * @param comment comment to add to
+     */
+    public void addHATEOAStoComment(Comment comment, Blogpost parent) {
+        if (comment == null) return;
     }
 }
