@@ -1,5 +1,5 @@
 function Blogpost(properties) {
-    return <div className="card mb-4">
+    return <div className="card my-4">
         <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
         <div className="card-body">
             <h2 className="card-title">{properties.title}</h2>
