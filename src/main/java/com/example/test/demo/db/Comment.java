@@ -16,6 +16,7 @@ public class Comment extends ResourceSupport {
 
     private String author;
 
+    @Column(columnDefinition="clob")
     @Lob
     private String textbody;
 

@@ -3,7 +3,7 @@ function Blogpost(properties) {
         <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
         <div className="card-body">
             <h2 className="card-title">{properties.title}</h2>
-            <p className="card-text">{properties.textBody}</p>
+            <p className="card-text text-truncate">{properties.textBody}</p>
             <a href="#" class="btn btn-primary" value={properties.id} onClick={() => showFullBlogpost(properties.id)}>Read More &rarr;</a>
         </div>
         <div className="card-footer text-muted">
