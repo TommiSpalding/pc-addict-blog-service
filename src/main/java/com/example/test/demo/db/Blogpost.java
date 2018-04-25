@@ -13,7 +13,7 @@ public class Blogpost extends ResourceSupport{
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="blogpost_id")
-    private Long blogId;
+    private long blogId;
 
     private String title;
 
