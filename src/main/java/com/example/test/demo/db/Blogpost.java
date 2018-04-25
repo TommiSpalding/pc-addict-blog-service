@@ -1,5 +1,7 @@
 package com.example.test.demo.db;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-public class Blogpost {
+public class Blogpost extends ResourceSupport{
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="blogpost_id")
@@ -41,11 +43,11 @@ public class Blogpost {
         setTimePosted(Instant.now().getEpochSecond());
     }
 
-    public long getId() {
+    public long getBlogId() {
         return blogId;
     }
 
-    public void setId(long id) {
+    public void setBlogId(long id) {
         this.blogId = id;
     }
 

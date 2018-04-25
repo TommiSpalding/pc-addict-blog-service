@@ -1,10 +1,12 @@
 package com.example.test.demo.db;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-public class Comment {
+public class Comment extends ResourceSupport {
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="comment_id")
@@ -44,11 +46,11 @@ public class Comment {
         setTimePosted(Instant.now().getEpochSecond());
     }*/
 
-    public long getId() {
+    public long getCommentId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setCommentId(long id) {
         this.id = id;
     }
 

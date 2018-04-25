@@ -7,6 +7,8 @@ import com.example.test.demo.db.CommentRepository;
 import com.example.test.demo.exception.CannotFindBlogpostException;
 import com.example.test.demo.exception.CannotFindCommentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 @org.springframework.web.bind.annotation.RestController
@@ -27,7 +30,7 @@ public class RestController {
 
         repo.save(a);
 
-        UriComponents uriComponents = b.path("/blogposts/{id}").buildAndExpand(a.getId());
+        UriComponents uriComponents = b.path("/blogposts/{id}").buildAndExpand(a.getBlogId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uriComponents.toUri());
@@ -42,7 +45,24 @@ public class RestController {
         HttpStatus status = HttpStatus.OK;
 
         int size = 0;
-        for(Blogpost value : blogposts) { size++; }
+        for(Blogpost value : blogposts) {
+            Link selfLink = ControllerLinkBuilder.linkTo(RestController.class).slash("blogposts").slash(value.getBlogId()).withSelfRel();
+            value.add(selfLink);
+
+            if (value.getComments().size() > 0) {
+                Link commentsLink = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class)
+                        .getComments(value.getBlogId())).withRel("allComments");
+                value.add(commentsLink);
+
+                for (int i = 0; i < value.getComments().size(); i++) {
+                    selfLink = ControllerLinkBuilder.linkTo(RestController.class)
+                            .slash("blogposts").slash(value.getBlogId()).slash("comments").slash(i).withSelfRel();
+                    value.getComments().get(i).add(selfLink);
+                }
+            }
+
+            size++;
+        }
 
         if(size == 0)
             status = HttpStatus.NOT_FOUND;
@@ -133,7 +153,7 @@ public class RestController {
         blogpost.addComment(a);
         repo.save(blogpost);
 
-        UriComponents uriComponents = b.path("/{blogpostsId}/comments/{id}").buildAndExpand(blogpostsId, a.getId());
+        UriComponents uriComponents = b.path("/{blogpostsId}/comments/{id}").buildAndExpand(blogpostsId, a.getCommentId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uriComponents.toUri());
@@ -142,7 +162,7 @@ public class RestController {
     }
 
     @RequestMapping(value = "blogposts/{blogpostsId}/comments", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Comment>> getComment(@PathVariable long blogpostsId) throws CannotFindBlogpostException {
+    public ResponseEntity<Iterable<Comment>> getComments(@PathVariable long blogpostsId) throws CannotFindBlogpostException {
 
         Optional<Blogpost> opt = repo.findById(blogpostsId);
 
@@ -163,7 +183,7 @@ public class RestController {
     }
 
     @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Comment> getComments(@PathVariable long blogpostsId, @PathVariable int id) throws CannotFindBlogpostException, CannotFindCommentException {
+    public ResponseEntity<Comment> getComment(@PathVariable long blogpostsId, @PathVariable int id) throws CannotFindBlogpostException, CannotFindCommentException {
 
         Optional<Blogpost> opt = repo.findById(blogpostsId);
 
