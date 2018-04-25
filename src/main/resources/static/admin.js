@@ -100,14 +100,14 @@ function createBlogpostTable(e) {
             let b = tr.insertCell().appendChild(document.createElement('button'));
             b.setAttribute('class','btn btn-danger');
             b.innerHTML = 'DELETE';
-            b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+            b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId, { method: 'delete' }).then(() => { window.location.reload(false); }); });
 
             let b2 = tr.insertCell().appendChild(document.createElement('button'));
             b2.setAttribute('class','btn btn-primary');
             b2.setAttribute('data-toggle','modal');
-            b2.setAttribute('data-target','modifyPostModal');
+            b2.setAttribute('data-target','#modifyPostModal');
             b2.innerHTML = 'MODIFY';
-            b2.addEventListener('click', () => { preModify(arr[j].id); });
+            b2.addEventListener('click', () => { preModify(arr[j].blogId); });
 
             for(let l = 0; l < arr[j].comments.length; l++) {
 
@@ -123,7 +123,7 @@ function createBlogpostTable(e) {
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
                 b1.setAttribute('class','btn btn-danger');
                 b1.innerHTML = 'DELETE';
-                b1.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id + '/comments/' + l, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+                b1.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId + '/comments/' + l, { method: 'delete' }).then(() => { window.location.reload(false); }); });
             }
         }
     });
