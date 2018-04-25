@@ -42,7 +42,7 @@ window.addEventListener('load', () => {
                 headers: {
                     'content-type': 'application/json',
                     'Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE='
-               }
+                }
                }).then((r) => { console.log(r); window.location.reload(false); });
         });
     
@@ -102,13 +102,23 @@ function createBlogpostTable(e) {
             b.innerHTML = 'DELETE';
             b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
 
+            let b2 = tr1.insertCell().appendChild(document.createElement('button'));
+            b2.setAttribute('class','btn btn-primary');
+            b2.setAttribute('data-toggle','modal');
+            b2.setAttribute('data-target','modifyPostModal');
+            let item = "b" + arr[j].id;
+            b2.innerHTML = 'MODIFY';
+            b2.addEventListener('click', () => { preModify(arr[j].id); });
+
             for(let l = 0; l < arr[j].comments.length; l++) {
 
                 let arrr = arr[j].comments;
 
                 let tr1 = tbl.insertRow();
+
+                let javascriptisfun = l + 1;
         
-                tr1.insertCell().appendChild(document.createTextNode('c' + l + 1));
+                tr1.insertCell().appendChild(document.createTextNode('c' + javascriptisfun));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].author));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].likes));
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
@@ -120,4 +130,34 @@ function createBlogpostTable(e) {
     });
 
     e.appendChild(tbl);
+}
+
+function preModify(id) {
+
+    console.log(id);
+
+    document.thisIsNotGood = id;
+}
+
+function modifyPost() {
+
+    console.log(document.thisIsNotGood);
+
+    fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + document.thisIsNotGood, {
+
+        method: 'POST',
+
+        body: JSON.stringify({
+
+            title: document.getElementById("modifyTitle").value,
+            authorName: document.getElementById("modifyAuthor").value,
+            textBody: document.getElementById("modifyTextBody").value,
+        }),
+
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE='
+        }
+
+    }).then(() => { window.location.reload(false); });
 }

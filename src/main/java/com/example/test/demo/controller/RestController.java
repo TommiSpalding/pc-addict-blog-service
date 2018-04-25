@@ -37,6 +37,29 @@ public class RestController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/blogposts/{id}", method = RequestMethod.POST)
+    public ResponseEntity<Void> modifyBlogpost(@PathVariable long id, @RequestBody Blogpost a, UriComponentsBuilder b) {
+
+        Optional<Blogpost> opt = repo.findById(id);
+
+        if (!opt.isPresent()) throw new CannotFindBlogpostException(id);
+
+        Blogpost blogpost = opt.get();
+
+        blogpost.setAuthorName(a.getAuthorName());
+        blogpost.setTextBody(a.getTextBody());
+        blogpost.setTitle(a.getTitle());
+
+        repo.save(blogpost);
+
+        UriComponents uriComponents = b.path("/blogposts/{id}").buildAndExpand(a.getBlogId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(uriComponents.toUri());
+
+        return new ResponseEntity<>(headers, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/blogposts", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Blogpost>> getBlogposts() {
 
