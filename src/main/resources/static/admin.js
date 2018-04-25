@@ -67,7 +67,6 @@ function addElementFieldTo(to, title, e, id) {
 
     element.setAttribute("type", "text");
     element.setAttribute("id", id);
-    element.setAttribute("value", title + " here");
     element.setAttribute("name", title);
 
     //to.appendChild(label);
@@ -100,7 +99,7 @@ function createBlogpostTable(e) {
             tr.insertCell().appendChild(document.createTextNode(arr[j].authorName));
             let b = tr.insertCell().appendChild(document.createElement('button'));
             b.setAttribute('class','btn btn-danger');
-            b.innerHTML = 'DELET';
+            b.innerHTML = 'DELETE';
             b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id, { method: 'delete' }).then(() => { window.location.reload(false); }); });
 
             for(let l = 0; l < arr[j].comments.length; l++) {
@@ -109,29 +108,13 @@ function createBlogpostTable(e) {
 
                 let tr1 = tbl.insertRow();
         
-                tr1.insertCell().appendChild(document.createTextNode(l + 1));
+                tr1.insertCell().appendChild(document.createTextNode('c' + l + 1));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].author));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].likes));
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
                 b1.setAttribute('class','btn btn-danger');
-                b1.innerHTML = 'DELET';
+                b1.innerHTML = 'DELETE';
                 b1.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id + '/comments/' + l, { method: 'delete' }).then(() => { window.location.reload(false); }); });
-
-                let b2 = tr1.insertCell().appendChild(document.createElement('button'));
-                b2.setAttribute('class','btn btn-primary');
-                let item = "b" + arr[j].id + "c" + arrr[l].id;
-
-                if(localStorage.getItem(item) == undefined || localStorage.getItem(item) == null || localStorage.getItem(item) == "" || localStorage.getItem(item) == 'no') {
-
-                    b2.innerHTML = 'LIKE';
-                    b2.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id + '/comments/' + l + '/like', { method: 'post', body: 'yes' }).then(() => { window.location.reload(false); localStorage.setItem(item, 'yes'); }); });
-
-                } else if(localStorage.getItem(item) == 'yes') {
-
-                    b2.innerHTML = 'DONT';
-                    b2.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].id + '/comments/' + l + '/like', { method: 'post', body: 'no' }).then(() => { window.location.reload(false); localStorage.setItem(item, 'no'); }); });
-
-                }
             }
         }
     });

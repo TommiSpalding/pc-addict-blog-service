@@ -2,7 +2,7 @@
 <html>
     <head>
 
-        <title>ADMIN PAGE</title>
+        <title>SUPER SECRET ADMIN PAGE</title>
 
         <link href="admin.css" rel="stylesheet">
         <meta charset="UTF-8" />
@@ -13,7 +13,11 @@
 
     <body>
 
-        <div class="container text-center" id="root-container">
+        <div class="container" id="root-container">
+            <div>
+                <p>Try the curl command: "curl -i -X POST/DELETE { anything } http://pc-addict-blog.herokuapp.com/blogposts" and see how it wont accept it without the proper authorization!</p>
+            </div>
+
             <div>
                 <input type="button" class="btn btn-primary btn-lg btn-block" style="margin-bottom:20px" onclick="location.href='https://pc-addict-blog.herokuapp.com/';" value="Back to index" />
             </div>
