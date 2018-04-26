@@ -210,7 +210,7 @@ class AllBlogPosts extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/blogposts').then((response) => response.json()).then((arr) => {
+        fetch('https://pc-addict-blog.herokuapp.com/blogposts').then((response) => response.json()).then((arr) => {
             this.setState({'arr':arr});
         });
     }
@@ -228,7 +228,7 @@ class BlogPostsByAuthorName extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:8080/blogposts/searchAuthor?q=${this.authorName}`).then((response) => response.json()).then((arr) => {
+        fetch(`https://pc-addict-blog.herokuapp.com/blogposts/searchAuthor?q=${this.authorName}`).then((response) => response.json()).then((arr) => {
             this.setState({'arr':arr});
         });
     }
@@ -246,7 +246,7 @@ class BlogPostsByTitle extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:8080/blogposts/search?q=${this.titleName}`).then((response) => response.json()).then((arr) => {
+        fetch(`https://pc-addict-blog.herokuapp.com/blogposts/search?q=${this.titleName}`).then((response) => response.json()).then((arr) => {
             this.setState({'arr':arr});
         });
     }
@@ -264,7 +264,7 @@ class ShowFullBlogPost extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:8080/blogposts/${Number(this.blogId)}`).then((response) => response.json()).then((post) => {
+        fetch(`https://pc-addict-blog.herokuapp.com/blogposts/${Number(this.blogId)}`).then((response) => response.json()).then((post) => {
             this.setState({'post':post});
         });
     }
