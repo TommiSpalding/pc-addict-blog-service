@@ -12,3 +12,7 @@ body {
 .bg-black {
     background-color: black;
 }
+
+.pre-wrap{
+    white-space: pre-wrap;
+}

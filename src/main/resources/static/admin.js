@@ -29,7 +29,7 @@ window.addEventListener('load', () => {
         b.setAttribute('class','btn btn-success btn-lg btn-block');
         b.setAttribute('style','margin-bottom:20px')
         b.addEventListener('click',() => {
-    
+            console.log(textBody.value)
             fetch('http://localhost:8080/blogposts', { 
     
                 method: 'POST', 

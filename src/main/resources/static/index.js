@@ -26,7 +26,7 @@ function FullBlogpost(properties) {
             <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
             <div className="card-body">
                 <h2 className="card-title">{properties.title}</h2>
-                <p className="card-text">{properties.textBody}</p>
+                <p className="card-text pre-wrap">{properties.textBody}</p>
             </div>
             <div className="card-footer text-muted">
                 {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
@@ -322,8 +322,9 @@ class ShowFullBlogPost extends React.Component {
     }
 }
 
-function SearchButton() {
-    return <div><Link to="dummy">Go!</Link></div>
+function fixLineBreaks(text) {
+    if (typeof text == 'undefined') return ""
+    return text.replace(/(?:\r\n|\r|\n)/g, '<br />');
 }
 
 ReactDOM.render(<HashRouter><App/></HashRouter>,document.getElementById("blogposts"));

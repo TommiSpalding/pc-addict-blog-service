@@ -26,4 +26,11 @@ public interface BlogpostRepository extends CrudRepository<Blogpost, Long> {
      * @return the list
      */
     List<Blogpost> findByAuthorNameContainingIgnoreCase(String str1);
+
+    /**
+     * Finds blogposts by author name containing ignore case list.
+     *
+     * @return the list
+     */
+    List<Blogpost> findAllByOrderByBlogIdDesc();
 }

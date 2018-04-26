@@ -85,7 +85,7 @@ public class RestController {
     @RequestMapping(value = "/blogposts", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Blogpost>> getBlogposts() {
 
-        Iterable<Blogpost> blogposts = repo.findAll();
+        Iterable<Blogpost> blogposts = repo.findAllByOrderByBlogIdDesc();
         HttpStatus status = HttpStatus.OK;
 
         int size = 0;
@@ -93,6 +93,7 @@ public class RestController {
             addHATEOAStoBlogpost(value);
             size++;
         }
+
 
         if(size == 0)
             status = HttpStatus.NOT_FOUND;
