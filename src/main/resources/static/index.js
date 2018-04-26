@@ -189,6 +189,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <Link to="/blogPostsTitle/">Perse</Link>
                 <Route exact={true} path="/" component={AllBlogPosts}/>
                 <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
                 <Route path="/blogPostsTitle/:titleName" component={BlogPostsByTitle}/>
@@ -236,7 +237,8 @@ class BlogPostsByTitle extends React.Component {
     constructor(props) {
         super(props);
         this.state = {'arr':[]}
-        this.titleName = props.match.params.titleName;
+        this.titleName = document.getElementById('searchInput').value;
+        this.props.history.push('/blogPostsTitle/'+titleName)
     }
 
     componentDidMount() {
