@@ -30,7 +30,7 @@ window.addEventListener('load', () => {
         b.setAttribute('style','margin-bottom:20px')
         b.addEventListener('click',() => {
     
-            fetch('https://pc-addict-blog.herokuapp.com/blogposts', { 
+            fetch('http://localhost:8080/blogposts', { 
     
                 method: 'POST', 
                 body: JSON.stringify({
@@ -88,7 +88,7 @@ function createBlogpostTable(e) {
     tr.insertCell().appendChild(document.createTextNode('author'));
     tr.insertCell().appendChild(document.createTextNode('act'));
 
-    fetch('https://pc-addict-blog.herokuapp.com/blogposts').then((response) => response.json()).then((arr) => {
+    fetch('http://localhost:8080/blogposts').then((response) => response.json()).then((arr) => {
 
         for(let j = 0; j < arr.length; j++) {
 
@@ -100,7 +100,7 @@ function createBlogpostTable(e) {
             let b = tr.insertCell().appendChild(document.createElement('button'));
             b.setAttribute('class','btn btn-danger');
             b.innerHTML = 'DELETE';
-            b.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
+            b.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
 
             let b2 = tr.insertCell().appendChild(document.createElement('button'));
             b2.setAttribute('class','btn btn-primary');
@@ -123,7 +123,7 @@ function createBlogpostTable(e) {
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
                 b1.setAttribute('class','btn btn-danger');
                 b1.innerHTML = 'DELETE';
-                b1.addEventListener('click',() => { fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + arr[j].blogId + '/comments/' + l, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
+                b1.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId + '/comments/' + l, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
             }
         }
     });
@@ -133,7 +133,7 @@ function createBlogpostTable(e) {
 
 function preModify(id) {
 
-    fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + id).then((response) => response.json()).then((arr) => {
+    fetch('http://localhost:8080/blogposts/' + id).then((response) => response.json()).then((arr) => {
 
         document.getElementById('modifyTitle').setAttribute('value', arr.title);
         document.getElementById('modifyAuthor').setAttribute('value', arr.authorName);
@@ -145,7 +145,7 @@ function preModify(id) {
 
 function modifyPost() {
 
-    fetch('https://pc-addict-blog.herokuapp.com/blogposts/' + document.thisIsNotGood, {
+    fetch('http://localhost:8080/blogposts/' + document.thisIsNotGood, {
 
         method: 'POST',
 
