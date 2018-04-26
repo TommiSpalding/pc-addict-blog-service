@@ -190,43 +190,32 @@ class App extends React.Component {
     render() {
         return (
             <div className="row">
-
-
-
-            <div className="col-md-8">
-                    <div id="safespace"></div>
-                                    <Route exact={true} path="/" component={AllBlogPosts}/>
-                                    <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
-                                    <Route path="/blogPostsByTitle/:titleName" component={BlogPostsByTitle}/>
-                                    <Route path="/blogPost/:blogId" component={ShowFullBlogPost}/>
-                                    <Route path="/dummy" component={Dummy}/>
-
-
-                    </div>
-
-                    <div className="col-md-4">
-
-                        <div className="card my-4">
-                            <h5 className="card-header">Search in posts...</h5>
-                            <div className="card-body">
-                                <div className="input-group">
-                                    <input type="text" className="form-control" placeholder="titles, authors, textbody" id="searchInput"></input>
-                                    <span className="input-group-btn">
-                              <Link className="btn btn-secondary" to="dummy">Go!</Link>
-                            </span>
-                                </div>
+                <div className="col-md-8">
+                    <Route exact={true} path="/" component={AllBlogPosts}/>
+                    <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
+                    <Route path="/blogPostsByTitle/:titleName" component={BlogPostsByTitle}/>
+                    <Route path="/blogPost/:blogId" component={ShowFullBlogPost}/>
+                    <Route path="/dummy" component={Dummy}/>
+                </div>
+                <div className="col-md-4">
+                    <div className="card my-4">
+                        <h5 className="card-header">Search in posts...</h5>
+                        <div className="card-body">
+                            <div className="input-group">
+                                <input type="text" className="form-control" placeholder="titles, authors, textbody" id="searchInput"></input>
+                                <span className="input-group-btn">
+                          <Link className="btn btn-secondary" to="/dummy">Go!</Link>
+                        </span>
                             </div>
                         </div>
-
-                        <div className="card my-4">
-                            <h5 className="card-header">Lets Follow The Rules</h5>
-                            <div className="card-body">
-                                <img className="card-img-top" src="mod.jpg"/>
-                            </div>
-                        </div>
-
                     </div>
-
+                    <div className="card my-4">
+                        <h5 className="card-header">Lets Follow The Rules</h5>
+                        <div className="card-body">
+                            <img className="card-img-top" src="mod.jpg"/>
+                        </div>
+                    </div>
+                </div>
             </div>);
     }
 }
