@@ -32,7 +32,7 @@ function FullBlogpost(properties) {
                 {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
             </div>
         </div>
-        <h4>Comments to this post</h4>
+        <h4 className="text-white">Comments to this post</h4>
         <ManyComments array={properties.comments} parentId={properties.id}/>
         <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
     </div>
@@ -157,8 +157,8 @@ function showFullBlogpost(id) {
 function searchTitle() {
     let title = document.getElementById('searchInput').value;
     let path = `/blogPostsTitle/${title}`;
-    React.Component.props.history.push(path);
-    blogpostsByTitle(title);
+    ReactDOM.render(<Dummy/>,document.getElementById("safespace"));
+
 }
 
 function prePost(id) {
@@ -190,10 +190,45 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Route exact={true} path="/" component={AllBlogPosts}/>
-                <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
-                <Route path="/blogPostsTitle/:titleName" component={BlogPostsByTitle}/>
-                <Route path="/blogPost/:blogId" component={ShowFullBlogPost}/>
+
+
+
+            <div className="col-md-8">
+                    <div id="safespace"></div>
+                                    <Link to="/blogPostsByTitle/">Perse</Link>
+                                    <Link to="/dummy">dummy</Link>
+                                    <Route exact={true} path="/" component={AllBlogPosts}/>
+                                    <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
+                                    <Route path="/blogPostsByTitle/:titleName" component={BlogPostsByTitle}/>
+                                    <Route path="/blogPost/:blogId" component={ShowFullBlogPost}/>
+                                    <Route path="/dummy" component={Dummy}/>
+
+
+                    </div>
+
+                    <div className="col-md-4">
+
+                        <div className="card my-4">
+                            <h5 className="card-header">Search in posts...</h5>
+                            <div className="card-body">
+                                <div className="input-group">
+                                    <input type="text" className="form-control" placeholder="titles, authors, textbody" id="searchInput"></input>
+                                    <span className="input-group-btn">
+                              <a href="#" className="btn btn-secondary" onClick="searchTitle()">Go!</a>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card my-4">
+                            <h5 className="card-header">Lets Follow The Rules</h5>
+                            <div className="card-body">
+                                <img className="card-img-top" src="mod.jpg"/>
+                            </div>
+                        </div>
+
+                    </div>
+
             </div>);
     }
 }
@@ -237,7 +272,8 @@ class BlogPostsByTitle extends React.Component {
     constructor(props) {
         super(props);
         this.state = {'arr':[]}
-        this.titleName = props.match.params.titleName;
+        this.titleName = props.match.params.titleName
+        console.log(this.titleName)
     }
 
     componentDidMount() {
@@ -251,9 +287,24 @@ class BlogPostsByTitle extends React.Component {
     }
 }
 
+class Dummy extends React.Component {
+    constructor(props) {
+        super(props);
+        let titleName = document.getElementById('searchInput').value;
+        console.log(titleName)
+        let path = `/blogPostsByTitle/${titleName}`
+        this.props.history.replace(path)
+    }
+
+    render() {
+        return <div></div>
+    }
+}
+
 class ShowFullBlogPost extends React.Component {
     constructor(props) {
         super(props);
+        console.log(this.props)
         this.state = {'post':{}}
         this.blogId = props.match.params.blogId;
     }
@@ -273,6 +324,10 @@ class ShowFullBlogPost extends React.Component {
                id={this.state.post.blogId}
                comments={this.state.post.comments}/>
     }
+}
+
+function SearchButton() {
+    return <div><Link to="dummy">Go!</Link></div>
 }
 
 ReactDOM.render(<HashRouter><App/></HashRouter>,document.getElementById("blogposts"));
