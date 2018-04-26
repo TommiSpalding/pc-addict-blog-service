@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Authentication entry point for handling the authenticated endpoints.
+ */
 @Component
-public class
-AuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
+public class AuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)

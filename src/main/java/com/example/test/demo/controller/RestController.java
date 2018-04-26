@@ -3,7 +3,6 @@ package com.example.test.demo.controller;
 import com.example.test.demo.db.Blogpost;
 import com.example.test.demo.db.BlogpostRepository;
 import com.example.test.demo.db.Comment;
-import com.example.test.demo.db.CommentRepository;
 import com.example.test.demo.exception.CannotFindBlogpostException;
 import com.example.test.demo.exception.CannotFindCommentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 
+/**
+ * The entire rest controller for the blog site.
+ */
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
     @Autowired
     private BlogpostRepository repo;
 
+    /**
+     * Endpoint for posting a blogpost.
+     *
+     * @param a the blogpost
+     * @param b supplied by spring boot
+     * @return the response entity
+     */
     @RequestMapping(value = "/blogposts", method = RequestMethod.POST)
     public ResponseEntity<Void> postBlogpost(@RequestBody Blogpost a, UriComponentsBuilder b) {
 
@@ -37,6 +46,14 @@ public class RestController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint for modifying a blogpost.
+     *
+     * @param id the id of the blogpost to modify
+     * @param a the blogpost
+     * @param b supplied by spring boot
+     * @return the response entity
+     */
     @RequestMapping(value = "/blogposts/{id}", method = RequestMethod.POST)
     public ResponseEntity<Void> modifyBlogpost(@PathVariable long id, @RequestBody Blogpost a, UriComponentsBuilder b) {
 
@@ -60,6 +77,11 @@ public class RestController {
         return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for getting all blogposts.
+     *
+     * @return the blogposts
+     */
     @RequestMapping(value = "/blogposts", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Blogpost>> getBlogposts() {
 
@@ -78,6 +100,13 @@ public class RestController {
         return new ResponseEntity<>(blogposts, status);
     }
 
+    /**
+     * Endpoint for getting a blogpost with some id.
+     *
+     * @param id the id
+     * @return the blogpost
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     */
     @RequestMapping(value = "/blogposts/{id}", method = RequestMethod.GET)
     public ResponseEntity<Blogpost> getBlogpost(@PathVariable long id) throws CannotFindBlogpostException {
 
@@ -91,6 +120,13 @@ public class RestController {
         return new ResponseEntity<>(blogpost, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for deleting a blogpost with some id.
+     *
+     * @param id the id
+     * @return the response entity
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     */
     @RequestMapping(value = "/blogposts/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteBlogpost(@PathVariable long id) throws CannotFindBlogpostException {
 
@@ -101,6 +137,12 @@ public class RestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Endpoint for searching blogposts.
+     *
+     * @param search the search parameters
+     * @return the response entity
+     */
     @RequestMapping(value = "/blogposts/search", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Blogpost>> search(@RequestParam(value = "q", required = false) String search) {
 
@@ -125,6 +167,12 @@ public class RestController {
         return new ResponseEntity<>(blogposts, status);
     }
 
+    /**
+     * Endpoint for searching blogposts with author in mind.
+     *
+     * @param search the search
+     * @return the response entity
+     */
     @RequestMapping(value = "/blogposts/searchAuthor", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Blogpost>> searchAuthor(@RequestParam(value = "q", required = false) String search) {
 
@@ -149,13 +197,15 @@ public class RestController {
         return new ResponseEntity<>(blogposts, status);
     }
 
-    //#############################################Comments###################################################
-
-
-    //is this needed????????????? yes is!!!!!!!!!!!!!!!!!
-    @Autowired
-    private CommentRepository cRepo;
-
+    /**
+     * Endpoint for posting a comment in a blogpost with some id.
+     *
+     * @param blogpostsId the blogposts id
+     * @param a           the comment
+     * @param b           the b
+     * @return the response entity
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     */
     @RequestMapping(value = "blogposts/{blogpostsId}/comments", method = RequestMethod.POST)
     public ResponseEntity<Void> postComment(@PathVariable long blogpostsId, @RequestBody Comment a, UriComponentsBuilder b) throws CannotFindBlogpostException {
 
@@ -176,6 +226,13 @@ public class RestController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint for getting all comments in a blogpost with some id.
+     *
+     * @param blogpostsId the blogposts id
+     * @return the comments
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     */
     @RequestMapping(value = "blogposts/{blogpostsId}/comments", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Comment>> getComments(@PathVariable long blogpostsId) throws CannotFindBlogpostException {
 
@@ -200,6 +257,15 @@ public class RestController {
         return new ResponseEntity<>(comments, status);
     }
 
+    /**
+     * Endpoint for getting a comment in a blogpost with some id.
+     *
+     * @param blogpostsId the blogposts id
+     * @param id          the id
+     * @return the comment
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     * @throws CannotFindCommentException  the cannot find comment exception
+     */
     @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}", method = RequestMethod.GET)
     public ResponseEntity<Comment> getComment(@PathVariable long blogpostsId, @PathVariable int id) throws CannotFindBlogpostException, CannotFindCommentException {
 
@@ -219,6 +285,15 @@ public class RestController {
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for deleting a comment in a blogpost with some id.
+     *
+     * @param blogpostsId the blogposts id
+     * @param id          the id
+     * @return the response entity
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     * @throws CannotFindCommentException  the cannot find comment exception
+     */
     @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteComment(@PathVariable long blogpostsId, @PathVariable int id) throws CannotFindBlogpostException, CannotFindCommentException {
 
@@ -241,6 +316,16 @@ public class RestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Endpoint for posting a like in a comment in a blogpost with some id.
+     *
+     * @param blogpostsId the blogposts id
+     * @param id          the id
+     * @param str         the str
+     * @return the response entity
+     * @throws CannotFindBlogpostException the cannot find blogpost exception
+     * @throws CannotFindCommentException  the cannot find comment exception
+     */
     @RequestMapping(value = "blogposts/{blogpostsId}/comments/{id}/like", method = RequestMethod.POST)
     public ResponseEntity<Void> postLike(@PathVariable long blogpostsId, @PathVariable int id, @RequestBody String str/*, UriComponentsBuilder b*/) throws CannotFindBlogpostException, CannotFindCommentException {
 
@@ -296,6 +381,8 @@ public class RestController {
      * Adds HATEOAS to a comment.
      *
      * @param comment comment to add to
+     * @param parent  the parent
+     * @param id      the id
      */
     public void addHATEOAStoComment(Comment comment, Blogpost parent, int id) {
         if (comment == null || parent == null) return;

@@ -18,6 +18,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * Web security conf for the blog site. Basically sets it up so unauthorized users can only post comments and likes and get everything but the admin page. Authorized users can post blogposts and delete comments etc.
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -28,6 +31,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        //cors and csrf disabled for simplicity
         http.cors().disable().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/", "/**.css", "/index.js", "/**.jpg", "/**.ico", "/blogposts/**").permitAll()
@@ -38,6 +42,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(authEntryPoint);
     }
 
+    /**
+     * Cors configuration. Disables cors for simplicity in this app.
+     *
+     * @return the cors configuration source
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
 
@@ -50,6 +59,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+    /**
+     * Sets up the admin user.
+     */
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
