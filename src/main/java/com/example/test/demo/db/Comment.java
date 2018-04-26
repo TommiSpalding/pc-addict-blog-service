@@ -16,8 +16,7 @@ public class Comment extends ResourceSupport {
 
     private String author;
 
-    @Column(columnDefinition="clob")
-    @Lob
+    @Column(length = 5000)
     private String textbody;
 
     @Column(name="time_posted")

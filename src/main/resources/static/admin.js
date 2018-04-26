@@ -2,18 +2,32 @@ window.addEventListener('load', () => {
 
     if(typeof(Storage) !== "undefined") {
 
-        document.body.appendChild(document.createElement('br'));
-        let title = addElementFieldTo(document.body, "title", "input");
-        document.body.appendChild(document.createElement('br'));
-        let author = addElementFieldTo(document.body, "author", "input");
-        document.body.appendChild(document.createElement('br'));
-        let textBody = addElementFieldTo(document.body, "textBody", "textarea");
-        document.body.appendChild(document.createElement('br'));
-    
+        let root = document.getElementById('root-container');
+
+        let form = document.createElement('form');
+        form.setAttribute('class', 'form-group');
+
+        let title = addElementFieldTo(form, "title", "input", "ititle");
+        title.setAttribute('class', 'form-control');
+        title.setAttribute('placeholder', 'enter title');
+
+        let author = addElementFieldTo(form, "author", "input", "iauthor");
+        author.setAttribute('class', 'form-control');
+        author.setAttribute('placeholder', 'enter author');
+
+        let textBody = addElementFieldTo(form, "textBody", "textarea", "itext");
+        textBody.setAttribute('class', 'form-control');
+        textBody.setAttribute('rows', '10');
+        textBody.setAttribute('placeholder', 'enter blog');
+
         textBody.style.height = "500px";
+
+        root.appendChild(form);
         
-        let b = document.body.appendChild(document.createElement('button'));
+        let b = root.appendChild(document.createElement('button'));
         b.innerHTML = 'POST';
+        b.setAttribute('class','btn btn-success btn-lg btn-block');
+        b.setAttribute('style','margin-bottom:20px')
         b.addEventListener('click',() => {
     
             fetch('http://localhost:8080/blogposts', { 
@@ -25,13 +39,14 @@ window.addEventListener('load', () => {
                     textBody: textBody.value,
                     authorName: author.value
                 }),
-                headers: new Headers({ 'Content-Type': 'application/json'}) }).then((r) => { console.log(r); window.location.reload(false); }); 
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE='
+                }
+               }).then((r) => { console.log(r); window.location.reload(false); });
         });
-        
-        document.body.appendChild(document.createElement('br'));
-        document.body.appendChild(document.createElement('br'));
     
-        createBlogpostTable(document.body);
+        createBlogpostTable(root);
         
     } else {
 
@@ -42,22 +57,19 @@ window.addEventListener('load', () => {
     }
 });
 
-function addElementFieldTo(to, title, e) {
+function addElementFieldTo(to, title, e, id) {
 
     let element = document.createElement(e);
 
-    let label = document.createElement("Label");
-    label.innerHTML = title;     
+    //let label = document.createElement("Label");
+    //label.setAttribute("for",id)
+    //label.innerHTML = title;
 
     element.setAttribute("type", "text");
-    element.setAttribute("value", title + " here");
+    element.setAttribute("id", id);
     element.setAttribute("name", title);
-    element.setAttribute("style", "width:200px");
 
-    label.setAttribute("style", "font-weight:normal");
-
-    to.appendChild(label);
-    document.body.appendChild(document.createElement('br'));
+    //to.appendChild(label);
     to.appendChild(element);
 
     return element;
@@ -67,8 +79,7 @@ function createBlogpostTable(e) {
 
     let tbl  = document.createElement('table');
 
-    tbl.style.border = '1px solid black';
-
+    tbl.setAttribute('class','table table-striped');
     tbl.setAttribute('id','table1');
 
     let tr = tbl.insertRow();
@@ -83,43 +94,72 @@ function createBlogpostTable(e) {
 
             let tr = tbl.insertRow();
     
-            tr.insertCell().appendChild(document.createTextNode(j + 1));
+            tr.insertCell().appendChild(document.createTextNode(arr[j].blogId));
             tr.insertCell().appendChild(document.createTextNode(arr[j].title));
             tr.insertCell().appendChild(document.createTextNode(arr[j].authorName));
             let b = tr.insertCell().appendChild(document.createElement('button'));
-            b.innerHTML = 'DELET';
-            b.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId, { method: 'delete' }).then(() => { window.location.reload(false); }); });
+            b.setAttribute('class','btn btn-danger');
+            b.innerHTML = 'DELETE';
+            b.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
+
+            let b2 = tr.insertCell().appendChild(document.createElement('button'));
+            b2.setAttribute('class','btn btn-primary');
+            b2.setAttribute('data-toggle','modal');
+            b2.setAttribute('data-target','#modifyPostModal');
+            b2.innerHTML = 'MODIFY';
+            b2.addEventListener('click', () => { preModify(arr[j].blogId); });
 
             for(let l = 0; l < arr[j].comments.length; l++) {
 
                 let arrr = arr[j].comments;
 
                 let tr1 = tbl.insertRow();
+
+                let javascriptisfun = l;
         
-                tr1.insertCell().appendChild(document.createTextNode(l + 1));
+                tr1.insertCell().appendChild(document.createTextNode('c' + javascriptisfun));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].author));
                 tr1.insertCell().appendChild(document.createTextNode(arrr[l].likes));
                 let b1 = tr1.insertCell().appendChild(document.createElement('button'));
-                b1.innerHTML = 'DELET';
-                b1.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId + '/comments/' + l, { method: 'delete' }).then(() => { window.location.reload(false); }); });
-
-                let b2 = tr1.insertCell().appendChild(document.createElement('button'));
-                let item = "b" + arr[j].blogId + "c" + arrr[l].commentId;
-
-                if(localStorage.getItem(item) == undefined || localStorage.getItem(item) == null || localStorage.getItem(item) == "" || localStorage.getItem(item) == 'no') {
-
-                    b2.innerHTML = 'LIKE';
-                    b2.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId + '/comments/' + l + '/like', { method: 'post', body: 'yes' }).then(() => { window.location.reload(false); localStorage.setItem(item, 'yes'); }); });
-
-                } else if(localStorage.getItem(item) == 'yes') {
-
-                    b2.innerHTML = 'DONT';
-                    b2.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId + '/comments/' + l + '/like', { method: 'post', body: 'no' }).then(() => { window.location.reload(false); localStorage.setItem(item, 'no'); }); });
-
-                }
+                b1.setAttribute('class','btn btn-danger');
+                b1.innerHTML = 'DELETE';
+                b1.addEventListener('click',() => { fetch('http://localhost:8080/blogposts/' + arr[j].blogId + '/comments/' + l, { method: 'delete', headers: { 'content-type': 'application/json','Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE=' } }).then(() => { window.location.reload(false); }); });
             }
         }
     });
 
     e.appendChild(tbl);
+}
+
+function preModify(id) {
+
+    fetch('http://localhost:8080/blogposts/' + id).then((response) => response.json()).then((arr) => {
+
+        document.getElementById('modifyTitle').setAttribute('value', arr.title);
+        document.getElementById('modifyAuthor').setAttribute('value', arr.authorName);
+        document.getElementById('modifyTextBody').innerHTML = arr.textBody;
+    });
+
+    document.thisIsNotGood = id;
+}
+
+function modifyPost() {
+
+    fetch('http://localhost:8080/blogposts/' + document.thisIsNotGood, {
+
+        method: 'POST',
+
+        body: JSON.stringify({
+
+            title: document.getElementById("modifyTitle").value,
+            authorName: document.getElementById("modifyAuthor").value,
+            textBody: document.getElementById("modifyTextBody").value,
+        }),
+
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': 'Basic YWRtaW46dGFpa2F2aWl0dGE='
+        }
+
+    }).then(() => { window.location.reload(false); });
 }

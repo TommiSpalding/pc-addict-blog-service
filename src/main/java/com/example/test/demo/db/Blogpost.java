@@ -17,8 +17,7 @@ public class Blogpost extends ResourceSupport{
 
     private String title;
 
-    @Column(columnDefinition="clob")
-    @Lob
+    @Column(length = 5000)
     private String textBody;
 
     @Column(name="author_name")

@@ -1,9 +1,14 @@
 body {
   padding-top: 54px;
+  background: #343a40 !important;
 }
 
 @media (min-width: 992px) {
   body {
     padding-top: 56px;
   }
+}
+
+.bg-black {
+    background-color: black;
 }

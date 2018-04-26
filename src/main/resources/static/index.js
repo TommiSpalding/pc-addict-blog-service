@@ -7,7 +7,7 @@ function Blogpost(properties) {
     let pathname = `/blogPost/${properties.id}`
     let authorPathname = `/blogPostsByAuthor/${properties.authorName}`
 
-    return <div className="card mb-4">
+    return <div className="card my-4">
         <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
         <div className="card-body">
             <h2 className="card-title">{properties.title}</h2>
@@ -22,7 +22,7 @@ function Blogpost(properties) {
 
 function FullBlogpost(properties) {
     return <div>
-        <div className="card mb-4">
+        <div className="card my-4">
             <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
             <div className="card-body">
                 <h2 className="card-title">{properties.title}</h2>
@@ -156,8 +156,9 @@ function showFullBlogpost(id) {
 
 function searchTitle() {
     let title = document.getElementById('searchInput').value;
-    let path = `/blogPostsTitle/${title}`
-    React.Component.props.history.push(path)
+    let path = `/blogPostsTitle/${title}`;
+    React.Component.props.history.push(path);
+    blogpostsByTitle(title);
 }
 
 function prePost(id) {
