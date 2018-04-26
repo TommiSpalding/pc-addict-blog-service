@@ -195,8 +195,6 @@ class App extends React.Component {
 
             <div className="col-md-8">
                     <div id="safespace"></div>
-                                    <Link to="/blogPostsByTitle/">Perse</Link>
-                                    <Link to="/dummy">dummy</Link>
                                     <Route exact={true} path="/" component={AllBlogPosts}/>
                                     <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
                                     <Route path="/blogPostsByTitle/:titleName" component={BlogPostsByTitle}/>
@@ -214,7 +212,7 @@ class App extends React.Component {
                                 <div className="input-group">
                                     <input type="text" className="form-control" placeholder="titles, authors, textbody" id="searchInput"></input>
                                     <span className="input-group-btn">
-                              <a href="#" className="btn btn-secondary" onClick="searchTitle()">Go!</a>
+                              <Link className="btn btn-secondary" to="dummy">Go!</Link>
                             </span>
                                 </div>
                             </div>
@@ -292,8 +290,11 @@ class Dummy extends React.Component {
         super(props);
         let titleName = document.getElementById('searchInput').value;
         console.log(titleName)
-        let path = `/blogPostsByTitle/${titleName}`
-        this.props.history.replace(path)
+        this.path = `/blogPostsByTitle/${titleName}`
+    }
+
+    componentDidMount() {
+        this.props.history.replace(this.path)
     }
 
     render() {
