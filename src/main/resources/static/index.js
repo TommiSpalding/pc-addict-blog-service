@@ -190,11 +190,6 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <ul>
-                    <li><Link to="/blogPostsByAuthor/">Page 1</Link></li>
-                    <li><Link to="/blogPostsTitle/">Page 2</Link></li>
-                    <li><Link to="/blogPost/">Page 3</Link></li>
-                </ul>
                 <Route exact={true} path="/" component={AllBlogPosts}/>
                 <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
                 <Route path="/blogPostsTitle/:titleName" component={BlogPostsByTitle}/>
