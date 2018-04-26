@@ -52,7 +52,7 @@
 
         <div class="container" id="root-container">
             <div>
-                <p>Try the curl command: "curl -i -X POST/DELETE { anything } http://pc-addict-blog.herokuapp.com/blogposts" and see how it wont accept it without the proper authorization!</p>
+                <p>Try the curl command: "curl -v -H "Content-Type: application/json" -H "Authorization: Basic WONTWORK" -X POST -d "{\"title\": \"test\", \"authorName\": \"john doe\", \"textBody\": \"my blog post\"}" http://pc-addict-blog.herokuapp.com/blogposts" and see how it wont accept it without the proper authorization!</p>
             </div>
 
             <div>
