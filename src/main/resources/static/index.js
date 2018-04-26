@@ -21,6 +21,7 @@ function Blogpost(properties) {
 }
 
 function FullBlogpost(properties) {
+    let authorPathname = `/blogPostsByAuthor/${properties.authorName}`
     return <div>
         <div className="card my-4">
             <img className="card-img-top" src="shiit.jpg" alt="Card image cap"/>
@@ -29,7 +30,7 @@ function FullBlogpost(properties) {
                 <p className="card-text pre-wrap">{properties.textBody}</p>
             </div>
             <div className="card-footer text-muted">
-                {new Date(Number(properties.timePosted)*1000).toDateString()} by <a href="#" value={properties.authorName} onClick={() => blogpostsByAuthorName(properties.authorName) }>{properties.authorName}</a>
+                {new Date(Number(properties.timePosted)*1000).toDateString()} by <Link value={properties.authorName} to={authorPathname}>{properties.authorName}</Link>
             </div>
         </div>
         <h4 className="text-white">Comments to this post</h4>
