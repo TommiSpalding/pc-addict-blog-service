@@ -33,8 +33,8 @@ function FullBlogpost(properties) {
             </div>
         </div>
         <h4 className="text-white">Comments to this post</h4>
-        <ManyComments array={properties.comments} parentId={properties.id}/>
-        <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id)}>Post a Comment!</button>
+        <ManyComments array={properties.comments} parentId={properties.id} refresh={properties.refresh}/>
+        <button type="button" className="btn btn-success" data-toggle="modal" data-target="#postCommentModal" onClick={prePost(properties.id, properties.refresh)}>Post a Comment!</button>
     </div>
 }
 
@@ -47,7 +47,7 @@ function Comment(properties) {
         return <div className="card mb-3">
                 <div className="card-body">
                     <p className="card-text float-left">{properties.textBody}</p>
-                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parentId} onClick={() => likeComment(properties.parentId, properties.id, item, true) }>Like!</button></div>
+                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parentId} onClick={() => likeComment(properties.parentId, properties.id, item, true, properties.refresh) }>Like!</button></div>
                 </div>
 
 
@@ -65,7 +65,7 @@ function Comment(properties) {
         return <div className="card mb-3">
                 <div className="card-body">
                     <p className="card-text float-left">{properties.textBody}</p>
-                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parentId} onClick={() => likeComment(properties.parentId, properties.id, item, false) }>Dont!</button></div>
+                    <div className="float-right"><button className="btn btn-primary btn-sm" value={properties.id, properties.parentId} onClick={() => likeComment(properties.parentId, properties.id, item, false, properties.refresh) }>Dont!</button></div>
                 </div>
 
 
@@ -94,7 +94,8 @@ function ManyComments(properties) {
         likes={arr[j].likes}
         id={j}
         realid={arr[j].commentId}
-        parentId={properties.parentId}/>)
+        parentId={properties.parentId}
+        refresh={properties.refresh}/>)
     }
 
     return <div>{output}</div>
@@ -117,12 +118,11 @@ function ManyBlogposts(properties) {
     return <div>{output}</div>
 }
 
-function likeComment(parentId, id, item, bool) {
-
+function likeComment(parentId, id, item, bool, refresh) {
     if(!bool)
-        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'no' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'no'); });
+        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'no' }).then(() => { localStorage.setItem(item, 'no'); refresh(); });
     else
-        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => { showFullBlogpost(parentId); localStorage.setItem(item, 'yes'); });
+        fetch(`http://localhost:8080/blogposts/${parentId}/comments/${id}/like`,{ method: 'post', body: 'yes' }).then(() => {  localStorage.setItem(item, 'yes'); refresh(); });
 }
 
 function allBlogposts() {
@@ -161,12 +161,14 @@ function searchTitle() {
 
 }
 
-function prePost(id) {
+function prePost(id, refresh) {
 
     document.thisIsNotGood = id;
+    document.neitherIsThis = refresh
 }
 
 function postComment() {
+    console.log(document.neitherIsThis)
 
     fetch('http://localhost:8080/blogposts/' + document.thisIsNotGood + '/comments', {
 
@@ -181,7 +183,7 @@ function postComment() {
 
         headers: new Headers({ 'Content-Type': 'application/json'})
 
-    }).then(() => { showFullBlogpost(document.thisIsNotGood) });
+    }).then(() => { document.neitherIsThis() });
 }
 
 
@@ -190,43 +192,32 @@ class App extends React.Component {
     render() {
         return (
             <div className="row">
-
-
-
-            <div className="col-md-8">
-                    <div id="safespace"></div>
-                                    <Route exact={true} path="/" component={AllBlogPosts}/>
-                                    <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
-                                    <Route path="/blogPostsByTitle/:titleName" component={BlogPostsByTitle}/>
-                                    <Route path="/blogPost/:blogId" component={ShowFullBlogPost}/>
-                                    <Route path="/dummy" component={Dummy}/>
-
-
-                    </div>
-
-                    <div className="col-md-4">
-
-                        <div className="card my-4">
-                            <h5 className="card-header">Search in posts...</h5>
-                            <div className="card-body">
-                                <div className="input-group">
-                                    <input type="text" className="form-control" placeholder="titles, authors, textbody" id="searchInput"></input>
-                                    <span className="input-group-btn">
-                              <Link className="btn btn-secondary" to="dummy">Go!</Link>
-                            </span>
-                                </div>
+                <div className="col-md-8">
+                    <Route exact={true} path="/" component={AllBlogPosts}/>
+                    <Route path="/blogPostsByAuthor/:authorName" component={BlogPostsByAuthorName}/>
+                    <Route path="/blogPostsByTitle/:titleName" component={BlogPostsByTitle}/>
+                    <Route path="/blogPost/:blogId" component={ShowFullBlogPost}/>
+                    <Route path="/dummy" component={Dummy}/>
+                </div>
+                <div className="col-md-4">
+                    <div className="card my-4">
+                        <h5 className="card-header">Search in posts...</h5>
+                        <div className="card-body">
+                            <div className="input-group">
+                                <input type="text" className="form-control" placeholder="titles, authors, textbody" id="searchInput"></input>
+                                <span className="input-group-btn">
+                          <Link className="btn btn-secondary" to="/dummy">Go!</Link>
+                        </span>
                             </div>
                         </div>
-
-                        <div className="card my-4">
-                            <h5 className="card-header">Lets Follow The Rules</h5>
-                            <div className="card-body">
-                                <img className="card-img-top" src="mod.jpg"/>
-                            </div>
-                        </div>
-
                     </div>
-
+                    <div className="card my-4">
+                        <h5 className="card-header">Lets Follow The Rules</h5>
+                        <div className="card-body">
+                            <img className="card-img-top" src="mod.jpg"/>
+                        </div>
+                    </div>
+                </div>
             </div>);
     }
 }
@@ -271,7 +262,6 @@ class BlogPostsByTitle extends React.Component {
         super(props);
         this.state = {'arr':[]}
         this.titleName = props.match.params.titleName
-        console.log(this.titleName)
     }
 
     componentDidMount() {
@@ -289,7 +279,6 @@ class Dummy extends React.Component {
     constructor(props) {
         super(props);
         let titleName = document.getElementById('searchInput').value;
-        console.log(titleName)
         this.path = `/blogPostsByTitle/${titleName}`
     }
 
@@ -305,12 +294,17 @@ class Dummy extends React.Component {
 class ShowFullBlogPost extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props)
         this.state = {'post':{}}
         this.blogId = props.match.params.blogId;
     }
 
     componentDidMount() {
+        fetch(`http://localhost:8080/blogposts/${Number(this.blogId)}`).then((response) => response.json()).then((post) => {
+            this.setState({'post':post});
+        });
+    }
+
+    refresh() {
         fetch(`http://localhost:8080/blogposts/${Number(this.blogId)}`).then((response) => response.json()).then((post) => {
             this.setState({'post':post});
         });
@@ -323,7 +317,8 @@ class ShowFullBlogPost extends React.Component {
                timePosted={this.state.post.timePosted}
                authorName={this.state.post.authorName}
                id={this.state.post.blogId}
-               comments={this.state.post.comments}/>
+               comments={this.state.post.comments}
+               refresh={this.refresh.bind(this)}/>
     }
 }
 

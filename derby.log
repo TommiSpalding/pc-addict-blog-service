@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Thu Apr 26 05:58:00 EEST 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0162-ffe2-d9f2-00001037c568 
-on database directory memory:C:\Users\Mestari\Desktop\pc-addict-blog-service\testdb with class loader java.net.URLClassLoader@111f0a47 
+Thu Apr 26 06:28:50 EEST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0162-ffff-180d-000007e3d2c0 
+on database directory memory:C:\Users\Mestari\Desktop\pc-addict-blog-service\testdb with class loader java.net.URLClassLoader@3033f7f7 
 Loaded from file:/C:/Users/Mestari/.m2/repository/org/apache/derby/derby/10.14.1.0/derby-10.14.1.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_111-b14
